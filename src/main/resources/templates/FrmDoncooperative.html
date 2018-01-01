@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorator="layout">
+<head>
+  <title>PEJ/D&eacute;coupage territoriale</title>
+</head>
+<body>
+ 
+  <div layout:fragment="content">
+                 <!-- page content -->
+        <div class="right_col" role="main">
+          <div class="">
+            <div class="page-title">
+              <div class="title_left">
+                <h3>Accord de don</h3>
+              </div>
+
+              <div class="title_right">
+                <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+                  <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search for..."/>
+                    <span class="input-group-btn">
+                      <button class="btn btn-default" type="button">Go!</button>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="clearfix"></div>
+			<div th:with="notifyMessages=${session[T(com.pej.services.NotificationServiceImpl).NOTIFY_MSG_SESSION_KEY]}">	
+				  <div th:each="msg : ${notifyMessages}"  class="alert alert-success alert-dismissible fade in" th:classappend="'alert-'+${#strings.toLowerCase(msg.type)}" role="alert">
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+					</button>
+					<strong th:text="${msg.text}"></strong>
+				  </div>
+				  <span th:if="${notifyMessages}" th:remove="all" th:text="${session.remove(T(com.pej.services.NotificationServiceImpl).NOTIFY_MSG_SESSION_KEY)}"></span>
+			</div>
+            <div class="row">
+
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Don</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                          <li><a href="#">Settings 1</a>
+                          </li>
+                          <li><a href="#">Settings 2</a>
+                          </li>
+                        </ul>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+
+                  <div class="x_content">
+										
+					<form id="frmDon" novalidate="true"  class="frmPej form-horizontal form-label-left" action="#" th:action="@{/pej/cooperative/don}" th:object="${objDon}" method="post">	    	
+				       <div class="item form-group" style="display:none;">
+                            <label for="numerofiche" class="control-label col-md-3 col-sm-3 col-xs-12">Coopérative N°</label>
+                             <div class="col-md-6 col-sm-6 col-xs-12">
+                              <input type="text" id="cooperativeid" th:field="*{cooperative}"  class="form-control col-md-7 col-xs-12"/>
+                            </div>
+                        </div>
+                        <div class="item form-group">
+                            <label for="nom" class="control-label col-md-3 col-sm-3 col-xs-12">Coopérative/Groupe</label>
+                             <div class="col-md-6 col-sm-6 col-xs-12">
+                              <input type="text" id="libgroupe" th:field="*{cooperative.libgroupe}" disabled="true" class="form-control col-md-7 col-xs-12"/>
+                            </div>
+                        </div>
+					   
+                        <div class="item form-group">
+                            <label for="nom" class="control-label col-md-3 col-sm-3 col-xs-12">Nature don</label>
+                             <div class="col-md-6 col-sm-6 col-xs-12">
+                              <input type="text" id="nature" th:field="*{nature}" th:required="required" class="form-control col-md-7 col-xs-12"/>
+                            </div>
+                        </div>
+                        <div class="item form-group">
+                            <label for="nom" class="control-label col-md-3 col-sm-3 col-xs-12">Libellé</label>
+                             <div class="col-md-6 col-sm-6 col-xs-12">
+                              <input type="text" id="libelle" th:field="*{libdon}" th:required="required" class="form-control col-md-7 col-xs-12"/>
+                            </div>
+                        </div>
+                        <div class="item form-group">
+                            <label for="nom" class="control-label col-md-3 col-sm-3 col-xs-12">Date accord</label>
+                             <div class="col-md-6 col-sm-6 col-xs-12">
+                              <input type="text" id="dateaccord" th:field="*{dateaccord}" th:required="required" class="form-control col-md-7 col-xs-12"/>
+                            </div>
+                        </div>
+                        <div class="item form-group">
+                            <label for="nom" class="control-label col-md-3 col-sm-3 col-xs-12">Montant</label>
+                             <div class="col-md-6 col-sm-6 col-xs-12">
+                              <input type="text" id="montant" th:field="*{montant}" th:required="required" class="form-control col-md-7 col-xs-12"/>
+                            </div>
+                        </div>
+                        <div class="item form-group">
+                            <label for="nom" class="control-label col-md-3 col-sm-3 col-xs-12">Observation</label>
+                             <div class="col-md-6 col-sm-6 col-xs-12">
+                              <input type="text" id="observation" th:field="*{observation}" th:required="required" class="form-control col-md-7 col-xs-12"/>
+                            </div>
+                        </div>
+					    <div class="ln_solid"></div>
+					    <div class="form-group">
+					      <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+					        <button type="reset" class="btn btn-primary">Annuler</button>
+					        <button type="submit" class="btn btn-success">Enregistrer</button>
+					      </div>
+					    </div>
+					
+					  </form>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+           
+          </div>
+          
+                      <div class="clearfix"></div>
+
+            <div class="row">
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Liste des dons accordés à </h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                          <li><a href="#">Settings 1</a>
+                          </li>
+                          <li><a href="#">Settings 2</a>
+                          </li>
+                        </ul>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                     <div class="row" >
+							 
+					</div>
+                    <div class="table-responsive">
+                      <table id="datatable-buttons" class="table table-striped table-bordered bulk_action">
+                        <thead>
+                          <tr class="headings">
+                            <th>
+                              <input type="checkbox" id="check-all" class="flat"/>
+                            </th>
+                            <th class="column-title">Nom  Prénom </th>
+                            <th class="column-title">Nature</th>
+                            <th class="column-title">Libellé</th>
+                            <th class="column-title">Montant</th>
+                            <th class="column-title">Date accord</th>                           
+                            <th class="column-title no-link last"><span class="nobr">Action</span>
+                            </th>
+                            <th class="bulk-actions" colspan="7">
+                              <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+                            </th>
+                          </tr>
+                        </thead>
+
+                        <tbody>
+                         <tr data-th-each="don : ${dons}" class="even pointer">
+	                            <td class="a-center ">
+	                              <input type="checkbox" class="flat" name="table_records"/>
+	                            </td>
+								<td class=" " data-th-text="${don.cooperative.libgroupe}"></td>
+								<td class=" " data-th-text="${don.nature}"></td>
+								<td class=" " data-th-text="${don.libdon}"></td>
+								<td class=" " data-th-text="${don.montant}"></td>
+								<td class=" " data-th-text="${don.dateaccord}"></td>
+								<td>
+									<div class="btn-group btn-group-xs">
+										<a class="btn btn-default"><i class="fa fa-edit" data-toggle="tooltip" title="Edit"></i> Modifier</a>
+										<a class="btn btn-xs btn-danger"><i class="fa fa-trash" data-toggle="tooltip" title="Edit"></i> Supprimer</a>
+									</div>
+								</td>
+						
+		           
+                          
+							</tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+        <!-- /page content -->    
+  </div>
+
+  <footer>
+    <p layout:fragment="custom-footer">This is some footer content from content page 1</p>
+  </footer>
+  
+
+    <!-- /validator -->
+</body>
+</html>

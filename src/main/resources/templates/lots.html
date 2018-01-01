@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorator="layout">
+<head>
+  <title>PEJ/Lots</title>
+</head>
+<body>
+ 
+  <div layout:fragment="content">
+        <!-- page content -->
+			 <!-- page content -->
+        <div class="right_col" role="main">
+          <div class="">
+
+
+            <div class="clearfix"></div>
+			<div th:with="notifyMessages=${session[T(com.pej.services.NotificationServiceImpl).NOTIFY_MSG_SESSION_KEY]}">	
+				  <div th:each="msg : ${notifyMessages}"  class="alert alert-success alert-dismissible fade in" th:classappend="'alert-'+${#strings.toLowerCase(msg.type)}" role="alert">
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+					</button>
+					<strong th:text="${msg.text}"></strong>
+				  </div>
+				  <span th:if="${notifyMessages}" th:remove="all" th:text="${session.remove(T(com.pej.services.NotificationServiceImpl).NOTIFY_MSG_SESSION_KEY)}"></span>
+			</div>
+            <div class="row">
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>LISTE DES LOTS</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                     <div class="row" >
+							 <a style="margin-left: 8px;" href="#" th:href="@{/pej/lots/add}" class="btn btn-info"><i class="fa fa-plus"></i> AJOUTER</a>
+					</div>
+                    <div class="table-responsive">
+                      <table id="datatable-buttons" class="table table-striped table-bordered display nowrap"  cellspacing="0" width="100%">
+                        <thead>
+                          <tr class="headings">
+                            <th>
+                              <input type="checkbox" id="check-all" class="flat"/>
+                            </th>
+                            <th class="column-title">#</th>
+                            <th class="column-title">INTITULE</th>
+                            <th class="column-title">DESCRIPTION </th>
+                            <th class="column-title">CABINET</th>
+                              <th class="column-title">RESPONSABLE</th>
+                            <th class="column-title no-link last"><span class="nobr">ACTION</span>
+                            </th>
+                            <th class="bulk-actions" colspan="7">
+                              <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+                            </th>
+                          </tr>
+                        </thead>
+
+                        <tbody>
+                         <tr data-th-each="lot : ${lots}" class="even pointer">
+	                            <td class="a-center ">
+	                              <input type="checkbox" class="flat" name="table_records"/>
+	                            </td>
+	                            <td class=" " data-th-text="${lot.idlot}"></td>
+								<td class=" " data-th-text="${lot.intitule}"></td>
+								<td class=" " data-th-text="${lot.description}"></td>
+								
+								<td class=" " data-th-text="${lot.cabinet.intitule}"></td>
+								<td class=" " data-th-text="${lot.cabinet.responsable}"></td>
+								<td>
+									<div class="btn-group btn-group-xs">
+										<a class="btn btn-default" th:href="@{'/pej/lots/' + ${lot.idlot}}"><i class="fa fa-edit" data-toggle="tooltip" title="Edit"></i> MODIFIER</a>
+										<a class="btn btn-xs btn-info"  th:href="@{'/pej/lots/cooperative/add/' + ${lot.idlot}}"><i class="fa fa-plus" data-toggle="tooltip" title="Ajouter coopérative"></i> AJOUTER COOPERATIVE</a>
+									</div>
+								</td>
+
+							</tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /page content -->
+        <!-- /page content -->    
+  </div>
+
+  <footer>
+    <p layout:fragment="custom-footer">This is some footer content from content page 1</p>
+  </footer>
+  
+
+</body>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorator="layout">
+<head>
+  <title>PEJ/D&eacute;coupage territoriale</title>
+</head>
+<body>
+ 
+  <div layout:fragment="content">
+                 <!-- page content -->
+        <div class="right_col" role="main">
+          <div class="">
+            <div class="page-title">
+              <div class="title_left">
+                <h3>EDITION D'UN AGENT RECRUTEUR</h3>
+              </div>
+
+              <div class="title_right">
+                <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+                  <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search for..."/>
+                    <span class="input-group-btn">
+                      <button class="btn btn-default" type="button">Go!</button>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="clearfix"></div>
+			<div th:with="notifyMessages=${session[T(com.pej.services.NotificationServiceImpl).NOTIFY_MSG_SESSION_KEY]}">	
+				  <div th:each="msg : ${notifyMessages}"  class="alert alert-success alert-dismissible fade in" th:classappend="'alert-'+${#strings.toLowerCase(msg.type)}" role="alert">
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+					</button>
+					<strong th:text="${msg.text}"></strong>
+				  </div>
+				  <span th:if="${notifyMessages}" th:remove="all" th:text="${session.remove(T(com.pej.services.NotificationServiceImpl).NOTIFY_MSG_SESSION_KEY)}"></span>
+			</div>
+            <div class="row">
+
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>AGENT RECRUTEUR</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <!--<li class="dropdown">-->
+                        <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>-->
+                        <!--<ul class="dropdown-menu" role="menu">-->
+                          <!--<li><a href="#">Settings 1</a>-->
+                          <!--</li>-->
+                          <!--<li><a href="#">Settings 2</a>-->
+                          <!--</li>-->
+                        <!--</ul>-->
+                      <!--</li>-->
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+
+                  <div class="x_content">
+										
+					  <form id="frmAgent"  novalidate="true" class="frmPej form-horizontal form-label-left" action="#" th:action="@{/pej/agents}" th:object="${objAgent}" method="post">
+				       <div class="item form-group">
+                            <label for="numeroagent1" class="control-label col-md-3 col-sm-3 col-xs-12">N°AGENT</label>
+                             <div class="col-md-6 col-sm-6 col-xs-12">
+                              <input type="text" id="numeroagent1" th:field="*{numeroagent}" th:required="required" class="form-control col-md-7 col-xs-12"/>
+                            </div>
+                        </div>
+					    <div class="item form-group">
+                            <label for="nom" class="control-label col-md-3 col-sm-3 col-xs-12">NOM</label>
+                             <div class="col-md-6 col-sm-6 col-xs-12">
+                              <input type="text" id="nom" th:field="*{nom}" th:required="required" class="form-control col-md-7 col-xs-12"/>
+                            </div>
+                        </div>
+                        <div class="item form-group">
+                            <label for="nom" class="control-label col-md-3 col-sm-3 col-xs-12">PRENOM</label>
+                             <div class="col-md-6 col-sm-6 col-xs-12">
+                              <input type="text" id="prenom" th:field="*{prenom}"  class="form-control col-md-7 col-xs-12"/>
+                            </div>
+                        </div>
+                        <div class="item form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="sexe">SEXE <span class="required">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+	                            <select id="sexe" name="sexe" class="select2_single form-control"  th:field="*{sexe}">
+                            		<option value="Masculin">Masculin</option> 
+                            		<option value="Féminin">Féminin</option>      
+                           		</select>
+	                         </div>
+                         </div>
+                         <div class="item form-group">
+                            <label for="nom" class="control-label col-md-3 col-sm-3 col-xs-12">TELEPHONE</label>
+                             <div class="col-md-6 col-sm-6 col-xs-12">
+                              <input type="text" data-inputmask="'mask' : '(+229) 99 99 99 99'" id="telephone" th:field="*{telephone}"  class="form-control col-md-7 col-xs-12"/>
+                            </div>
+                        </div>
+
+                        <div class="item form-group">
+                            <label for="cardid" class="control-label col-md-3 col-sm-3 col-xs-12">N°CARTE D'IDENTITE</label>
+                             <div class="col-md-6 col-sm-6 col-xs-12">
+                              <input type="text" id="cardid" th:field="*{cardid}"  class="form-control col-md-7 col-xs-12"/>
+                            </div>
+                        </div>
+
+                          <div class="item form-group" style="display:none;">
+                              <label for="idagent" class="control-label col-md-3 col-sm-3 col-xs-12">ID</label>
+                              <div class="col-md-6 col-sm-6 col-xs-12">
+                                  <input type="text" id="idagent" th:field="*{idagent}"  class="form-control col-md-7 col-xs-12"/>
+                              </div>
+                          </div>
+                        
+					    <div class="ln_solid"></div>
+					    <div class="form-group">
+					      <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+					        <button type="reset" class="btn btn-primary">ANNULER</button>
+					        <button type="submit" class="btn btn-success">ENREGISTRER</button>
+					      </div>
+					    </div>
+					
+					  </form>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+           
+          </div>
+        </div>
+        <!-- /page content -->    
+  </div>
+
+  <footer>
+    <p layout:fragment="custom-footer">This is some footer content from content page 1</p>
+  </footer>
+  
+  <!-- validator -->
+    <script th:inline="javascript">
+ 		// <![CDATA[
+      // initialize the validator function
+      validator.message.date = 'not a real date';
+	  console.log('Javascript function execution');
+      // validate a field on "blur" event, a 'select' on 'change' event & a '.reuired' classed multifield on 'keyup':
+      $('frmDepartement')
+        .on('blur', 'input[required], input.optional, select.required', validator.checkField)
+        .on('change', 'select.required', validator.checkField)
+        .on('keypress', 'input[required][pattern]', validator.keypress);
+
+      $('.multi.required').on('keyup blur', 'input', function() {
+        validator.checkField.apply($(this).siblings().last()[0]);
+      });
+
+      $('frmDepartement').submit(function(e) {
+    	console.log("Cacth user action");
+        e.preventDefault();
+        var submit = true;
+
+        // evaluate the form using generic validaing
+        if (!validator.checkAll($(this))) {
+          submit = false;
+        }
+
+        if (submit)
+          this.submit();
+
+        return false;
+      });
+      // ]]>
+    </script>
+    <!-- /validator -->
+</body>
+</html>

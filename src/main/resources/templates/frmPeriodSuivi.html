@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorator="layout">
+<head>
+  <title>PEJ/Formation</title>
+</head>
+<body>
+ 
+  <div layout:fragment="content">
+                 <!-- page content -->
+        <div class="right_col" role="main">
+          <div class="">
+            <div class="page-title">
+              <div class="title_left">
+                <h3>PERIOD DE SUIVI</h3>
+              </div>
+            </div>
+
+            <div class="clearfix"></div>
+			<div th:with="notifyMessages=${session[T(com.pej.services.NotificationServiceImpl).NOTIFY_MSG_SESSION_KEY]}">	
+				  <div th:each="msg : ${notifyMessages}"  class="alert alert-success alert-dismissible fade in" th:classappend="'alert-'+${#strings.toLowerCase(msg.type)}" role="alert">
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+					</button>
+					<strong th:text="${msg.text}"></strong>
+				  </div>
+				  <span th:if="${notifyMessages}" th:remove="all" th:text="${session.remove(T(com.pej.services.NotificationServiceImpl).NOTIFY_MSG_SESSION_KEY)}"></span>
+			</div>
+            <div class="row">
+
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>MODULE DE SUIVI</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+
+                  <div class="x_content">
+										
+					  <form id="frmFormation"  novalidate="true" class="frmPej form-horizontal form-label-left frmPej" action="#" th:action="@{/pej/entreprises/periodsuivi}" th:object="${periodeSuivi}" method="post">
+
+
+                        <div class="item form-group">
+                            <label for="dateDebut" class="control-label col-md-3 col-sm-3 col-xs-12">DATE DE DEBUT</label>
+                             <div class="col-md-6 col-sm-6 col-xs-12 date">
+                                 <input type="text" th:value="${#dates.format(periodeSuivi.dateDebut,'MM/dd/yyyy')}" th:name="dateDebut" th:id="dateDebut" class="form-control col-md-7 col-xs-12"/>
+
+                             </div>
+                        </div>
+                         <div class="item form-group">
+                            <label for="datefin" class="control-label col-md-3 col-sm-3 col-xs-12">DATE DE FIN</label>
+                             <div class="col-md-6 col-sm-6 col-xs-12 date">
+                                 <input type="text" th:value="${#dates.format(periodeSuivi.datefin,'MM/dd/yyyy')}" th:name="datefin" th:id="datefin" class="form-control col-md-7 col-xs-12"/>
+
+                             </div>
+                        </div>
+
+                          <div class="item form-group" style="display:none;">
+                              <label for="idformation" class="control-label col-md-3 col-sm-3 col-xs-12">ID FORMATEUR</label>
+                              <div class="col-md-6 col-sm-6 col-xs-12">
+                                  <input type="text" id="idformation" th:field="*{idperiode}"  class="form-control col-md-7 col-xs-12"/>
+                              </div>
+                          </div>
+
+                          <div class="item form-group" style="display:none;">
+                              <label for="idformation" class="control-label col-md-3 col-sm-3 col-xs-12">ID FORMATEUR</label>
+                              <div class="col-md-6 col-sm-6 col-xs-12">
+                                  <input type="text" id="formateur" th:field="*{formateur}"  class="form-control col-md-7 col-xs-12"/>
+                              </div>
+                          </div>
+
+                          <div class="item form-group" style="display:none;">
+                              <label for="idformation" class="control-label col-md-3 col-sm-3 col-xs-12">ID FORMATEUR</label>
+                              <div class="col-md-6 col-sm-6 col-xs-12">
+                                  <input type="text" id="entreprise" th:field="*{entreprise}"  class="form-control col-md-7 col-xs-12"/>
+                              </div>
+                          </div>
+
+					    <div class="ln_solid"></div>
+					    <div class="form-group">
+					      <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+					        <button type="reset" class="btn btn-primary">ANNULER</button>
+					        <button type="submit" class="btn btn-success">ENREGISTRER</button>
+					      </div>
+					    </div>
+					
+					  </form>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+           
+          </div>
+        </div>
+        <!-- /page content -->    
+  </div>
+
+  <footer>
+    <p layout:fragment="custom-footer">This is some footer content from content page 1</p>
+  </footer>
+  
+  
+</body>
+</html>

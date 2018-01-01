@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorator="layout">
+<head>
+  <title>Programme Emploi Jeune</title>
+</head>
+<body>
+ 
+  <div layout:fragment="content">
+        <!-- page content -->
+			 <!-- page content -->
+        <div class="right_col" role="main">
+          <div class="">
+
+
+            <div class="clearfix"></div>
+			<div th:with="notifyMessages=${session[T(com.pej.services.NotificationServiceImpl).NOTIFY_MSG_SESSION_KEY]}">	
+				  <div th:each="msg : ${notifyMessages}"  class="alert alert-success alert-dismissible fade in" th:classappend="'alert-'+${#strings.toLowerCase(msg.type)}" role="alert">
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+					</button>
+					<strong th:text="${msg.text}"></strong>
+				  </div>
+				  <span th:if="${notifyMessages}" th:remove="all" th:text="${session.remove(T(com.pej.services.NotificationServiceImpl).NOTIFY_MSG_SESSION_KEY)}"></span>
+			</div>
+              <div class="row">
+                  <div class="col-md-12 col-sm-12 col-xs-12">
+                      <div class="x_panel" style="height: auto;">
+                          <div class="x_title">
+                              <h2>FILTRER</h2>
+                              <ul class="nav navbar-right panel_toolbox">
+                                  <li><a class="collapse-link"><i class="fa fa-chevron-down"></i></a>
+                                  </li>
+                                  <li><a class="close-link"><i class="fa fa-close"></i></a>
+                                  </li>
+                              </ul>
+                              <div class="clearfix"></div>
+                          </div>
+                          <div class="x_content" style="display: none;">
+                              <form id="frmRecherche" class="form-horizontal form-label-left" action="#"
+                                    th:action="@{/pej/formations/search}" method="post">
+                                  <div class="item form-group item-filter">
+                                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="cabinetOptions">EXECUTES PAR LES CABINETS
+                                          <span class="required">*</span>
+                                      </label>
+                                      <div class="col-md-3 col-sm-3 col-xs-6">
+                                          <select id="cabinetOptions" class="form-control operation"
+                                                  data-attribute="cooperative.lot.cabinet.idcabinet">
+                                              <option value=""></option>
+                                              <option value="equal">Egal a</option>
+                                              <option value="NoEqual">Non egal a</option>
+                                          </select>
+                                      </div>
+                                      <div class="col-md-3 col-sm-3 col-xs-6">
+                                          <select id="cabinet"
+                                                  class="form-control item-value">
+                                              <option value=""></option>
+                                              <option data-th-each="cabinet : ${cabinets}" th:text="${cabinet.intitule}"
+                                                      th:value="${cabinet.idcabinet}"></option>
+                                          </select>
+                                      </div>
+                                  </div>
+
+                                  <div class="item form-group item-filter">
+                                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="lotOptions">RECU PAR
+                                          LES LOTS
+                                          <span class="required">*</span>
+                                      </label>
+                                      <div class="col-md-3 col-sm-3 col-xs-6">
+                                          <select id="lotOptions" class="form-control operation"
+                                                  data-attribute="cooperative.lot.idlot">
+                                              <option value=""></option>
+                                              <option value="in">Dans l'ensemble</option>
+                                              <option value="ino">Pas dans l'ensemble</option>
+                                          </select>
+                                      </div>
+                                      <div class="col-md-3 col-sm-3 col-xs-6">
+                                          <select id="lot" class="select2_single form-control item-value multi-filter"
+                                                  multiple="multiple">
+                                              <option data-th-each="lot : ${lots}"
+                                                      th:text="${lot.intitule}"
+                                                      th:value="${{lot.idlot}}"></option>
+                                          </select>
+                                      </div>
+                                  </div>
+
+                                  <div class="item form-group item-filter">
+                                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="groupeOptions">RECU PAR
+                                          LES COOPERATIVES
+                                          <span class="required">*</span>
+                                      </label>
+                                      <div class="col-md-3 col-sm-3 col-xs-6">
+                                          <select id="groupeOptions" class="form-control operation"
+                                                  data-attribute="cooperative.idgroupe">
+                                              <option value=""></option>
+                                              <option value="in">Dans l'ensemble</option>
+                                              <option value="ino">Pas dans l'ensemble</option>
+                                          </select>
+                                      </div>
+                                      <div class="col-md-3 col-sm-3 col-xs-6">
+                                          <select id="groupe" class="select2_single form-control item-value multi-filter"
+                                                  multiple="multiple">
+                                              <option data-th-each="cooperative : ${cooperatives}"
+                                                      th:text="${cooperative.libgroupe}"
+                                                      th:value="${{cooperative.idgroupe}}"></option>
+                                          </select>
+                                      </div>
+                                  </div>
+
+                                  <div class="item form-group item-filter">
+                                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="typeFormationOptions">TYPE
+                                          DE FORMATION
+                                          <span class="required">*</span>
+                                      </label>
+                                      <div class="col-md-3 col-sm-3 col-xs-6">
+                                          <select id="typeFormationOptions" class="form-control operation"
+                                                  data-attribute="typeformation.idtypeformation">
+                                              <option value=""></option>
+                                              <option value="in">Dans l'ensemble</option>
+                                              <option value="ino">Pas dans l'ensemble</option>
+                                          </select>
+                                      </div>
+                                      <div class="col-md-3 col-sm-3 col-xs-6">
+                                          <select id="typeFormation" class="select2_single form-control item-value multi-filter"
+                                                  multiple="multiple">
+                                              <option data-th-each="typeFormation : ${typeFormations}"
+                                                      th:text="${typeFormation.intitule}"
+                                                      th:value="${{typeFormation.idtypeformation}}"></option>
+                                          </select>
+                                      </div>
+                                  </div>
+
+                                  <div class="item form-group item-filter">
+                                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="libgroupe">INTITULE <span
+                                              class="required">*</span>
+                                      </label>
+                                      <div class="col-md-3 col-sm-3 col-xs-6">
+                                          <select id="libgroupe" class="form-control operation" data-attribute="libgroupe">
+                                              <option value=""></option>
+                                              <option value="equal">Egal a</option>
+                                              <option value="NoEqual">Non egal a</option>
+                                          </select>
+                                      </div>
+                                      <div class="col-md-3 col-sm-3 col-xs-6">
+                                          <input type="text" id="libgroupe"
+                                                 class="form-control col-md-7 col-xs-12 item-value"/>
+                                      </div>
+                                  </div>
+
+
+                                  <div class="col-md-3 col-sm-3 col-xs-6" style="display:none;">
+                                      <input type="text" id="criteria" name="criteria"
+                                             class="form-control col-md-7 col-xs-12"/>
+                                  </div>
+
+                                  <div class="col-md-3 col-sm-3 col-xs-6" style="display:none;">
+                                      <input type="text" id="criteria-send-value" th:value="${criteria}"
+                                             class="form-control col-md-7 col-xs-12"/>
+                                  </div>
+
+                                  <div class="col-md-3 col-sm-3 col-xs-6" style="display:none;">
+                                      <input type="text" id="page-request-next" th:value="${nextPage}"
+                                             class="form-control col-md-7 col-xs-12"/>
+                                  </div>
+
+                                  <div class="col-md-3 col-sm-3 col-xs-6" style="display:none;">
+                                      <input type="text" id="page-request-previous" th:value="${previousPage}"
+                                             class="form-control col-md-7 col-xs-12"/>
+                                  </div>
+
+                                  <div class="col-md-3 col-sm-3 col-xs-6" style="display:none;">
+                                      <input type="text" id="page-request-current-page" th:value="${currentPage}"
+                                             class="form-control col-md-7 col-xs-12"/>
+                                  </div>
+
+                                  <div class="col-md-3 col-sm-3 col-xs-6" style="display:none;">
+                                      <input type="text" id="page-request" name="page"
+                                             class="form-control col-md-7 col-xs-12"/>
+                                  </div>
+
+
+                                  <div class="ln_solid"></div>
+                                  <div class="form-group">
+                                      <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                          <button type="reset" class="btn btn-primary">ANNULER</button>
+                                          <button type="button" id="submit-candidat-filter" class="btn btn-success">
+                                              RECHERCHER
+                                          </button>
+                                      </div>
+                                  </div>
+
+                              </form>
+
+
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+              <div class="row">
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>LISTE DES MODULES DE FORMATION</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                      <form id="removeMultipleFormation" novalidate="true"
+                            class="frmPej form-horizontal form-label-left"
+                            th:action="@{/pej/formations/multiple/rm}"
+                            method="post">
+                          <div class="row">
+                              <button style="margin-left: 8px;" type="submit" class="btn btn-danger"><i
+                                      class="fa fa-plus"></i> SUPPRIMER LES FORMATIONS SELECTIONNEES
+                              </button>
+                              <a style="margin-left: 8px;" href="#" th:href="@{/pej/formations/add}" class="btn btn-info"><i class="fa fa-plus"></i> AJOUTER</a>
+                          </div>
+                    <div class="table-responsive">
+                      <table id="datatable-buttons" class="table table-striped table-bordered display nowrap" cellspacing="0" width="100%">
+                        <thead>
+                          <tr class="headings">
+                              <th class="column-title"></th>
+                            <th class="column-title">INTITULE</th>
+                            <th class="column-title">PERIODE</th>
+                            <th class="column-title">FORMATEURS</th>
+                            <th class="column-title no-link last"><span class="nobr">ACTION</span>
+                            </th>
+                            <th class="bulk-actions" colspan="7">
+                              <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+                            </th>
+                          </tr>
+                        </thead>
+
+                        <tbody>
+                         <tr data-th-each="formation : ${formations}" class="even pointer">
+	                            <td class="a-center ">
+                                    <input type="checkbox" class="flat" th:name="table_records"
+                                           th:value="${formation.idformation}"/>
+	                            </td>
+								<td class=" " data-th-text="${formation.intitule}"></td>
+								<td class=" " data-th-text=" 'DU '+ ${#dates.format(formation.dateformation,'dd/MM/yyyy')} + ' AU ' + ${#dates.format(formation.datefin,'dd/MM/yyyy')}"></td>
+								<td class=" " data-th-text="${formation.getFormateurNames()}"></td>
+                             <td>
+                                 <div class="btn-group btn-group-xs">
+                                     <a class="btn btn-xs btn-success"  th:href="@{'/pej/formations/add/' + ${formation.idformation}}"><i class="fa fa-plus" data-toggle="tooltip" title="enlever un participant"></i> MODIFIER</a>
+                                 </div>
+                                 <div class="btn-group btn-group-xs">
+                                     <a class="btn btn-xs btn-primary"  th:href="@{'/pej/formationgroupe/formation/' + ${formation.idformation}}"><i class="fa fa-plus" data-toggle="tooltip" title="enlever un participant"></i> AJOUTER UN GROUPE</a>
+                                 </div>
+                                 <div class="btn-group btn-group-xs">
+                                     <a class="btn btn-xs btn-warning"  th:href="@{'/pej/formationbeneficiaires/presence/' + ${formation.idformation}}"><i class="fa fa-plus" data-toggle="tooltip" title="enlever un participant"></i> PRESENCE</a>
+                                 </div>
+                                 <div class="btn-group btn-group-xs">
+                                     <a class="btn btn-xs btn-warning"  th:href="@{'/pej/bilan/' + ${formation.idformation}}"><i class="fa fa-plus" data-toggle="tooltip" title="Bilan"></i> BILAN</a>
+                                 </div>
+                             </td>
+							</tr>
+                        </tbody>
+                      </table>
+                    </div>
+                      </form>
+                  </div>
+                    <div class="row" style="padding-top:5px;">
+                        <div class="pull-left">
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <label data-th-text=" 'Total :' +  ${total}">
+                                </label>
+                                <select id="page-select"  class="form-control"
+                                >
+                                    <option data-th-each="listOfPage : ${listOfPages}" th:text="${listOfPage}"
+                                            th:value="${listOfPage - 1}"></option>
+                                </select>
+                            </div>
+
+                        </div>
+                        <div class="pull-right">
+                            <button style="margin-left: 8px;"
+                                    id="candidat-previous-page"
+                                    th:if="${hasPrevious == 'true'}"
+                                    class="btn btn-info"><i class="fa fa-plus"></i> PRECEDENT</button>
+                            <button style="margin-left: 8px;"
+                                    id="candidat-next-page"
+                                    th:if="${hasNext == 'true'}"
+                                    class="btn btn-success">
+                                <i class="fa fa-check-square-o"></i> SUIVANT</button>
+                        </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /page content -->
+        <!-- /page content -->    
+  </div>
+
+  <footer>
+    <p layout:fragment="custom-footer">This is some footer content from content page 1</p>
+  </footer>
+  
+
+</body>
+</html>

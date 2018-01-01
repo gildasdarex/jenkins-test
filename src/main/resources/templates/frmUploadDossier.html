@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorator="layout">
+<head>
+  <title>PEJ/D&eacute;coupage territoriale</title>
+</head>
+<body>
+ 
+  <div layout:fragment="content">
+                 <!-- page content -->
+        <div class="right_col" role="main">
+          <div class="">
+            <div class="page-title">
+              <div class="title_left">
+                <h3>Consitution dossier candidat</h3>
+              </div>
+
+              <div class="title_right">
+                <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+                  <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search for..."/>
+                    <span class="input-group-btn">
+                      <button class="btn btn-default" type="button">Go!</button>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="clearfix"></div>
+			<div th:with="notifyMessages=${session[T(com.pej.services.NotificationServiceImpl).NOTIFY_MSG_SESSION_KEY]}">	
+				  <div th:each="msg : ${notifyMessages}"  class="alert alert-success alert-dismissible fade in" th:classappend="'alert-'+${#strings.toLowerCase(msg.type)}" role="alert">
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">�</span>
+					</button>
+					<strong th:text="${msg.text}"></strong>
+				  </div>
+				  <span th:if="${notifyMessages}" th:remove="all" th:text="${session.remove(T(com.pej.services.NotificationServiceImpl).NOTIFY_MSG_SESSION_KEY)}"></span>
+			</div>
+                 <div class="clearfix"></div>
+
+            <div class="row">
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Charger un fichier</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                          <li><a href="#">Settings 1</a>
+                          </li>
+                          <li><a href="#">Settings 2</a>
+                          </li>
+                        </ul>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                   <form id="frmFile"  class="frmPej form-horizontal form-label-left" action="#" th:action="@{/pej/candidats/dossier/}" enctype="multipart/form-data" th:object="${fileBucket}" method="post">
+				       <div class="item form-group" style="display:none;">
+                            <label for="id" class="control-label col-md-3 col-sm-3 col-xs-12">ID</label>
+                             <div class="col-md-6 col-sm-6 col-xs-12">
+                              <input type="text" id="id" th:field="*{id}" th:required="required" class="form-control col-md-7 col-xs-12"/>
+                            </div>
+                        </div>
+                        <div class="item form-group">
+                            <label for="id" class="control-label col-md-3 col-sm-3 col-xs-12">Nature</label>
+                             <div class="col-md-6 col-sm-6 col-xs-12">
+                              <input type="text" id="id" th:field="*{nature}" th:required="required" class="form-control col-md-7 col-xs-12"/>
+                            </div>
+                        </div>
+				       <div class="item form-group">
+                            <label for="fileUpload" class="control-label col-md-3 col-sm-3 col-xs-12">Sélectionner fichier</label>
+                             <div class="col-md-6 col-sm-6 col-xs-12">
+                              <input type="file" id="fileUpload" th:field="*{file}"  class="form-control col-md-7 col-xs-12"/>
+                            </div>
+                        </div>
+					    
+					    <div class="ln_solid"></div>
+					    <div class="form-group">
+					      <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+					        <button type="reset" class="btn btn-primary">Annuler</button>
+					        <button type="submit" class="btn btn-success">Enregistrer</button>
+					      </div>
+					    </div>
+					
+					  </form>
+                 
+                  </div>
+                </div>
+              </div>
+            </div>
+           
+          </div>
+          
+          
+                      <div class="clearfix"></div>
+
+            <div class="row">
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Liste des dossiers</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                          <li><a href="#">Settings 1</a>
+                          </li>
+                          <li><a href="#">Settings 2</a>
+                          </li>
+                        </ul>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+              
+                    <div class="table-responsive">
+                      <table id="datatable-buttons" class="table table-striped table-bordered bulk_action">
+                        <thead>
+                          <tr class="headings">                          
+                            <th class="column-title">Candidat </th>
+                            <th class="column-title">Nature </th>
+        					<th class="column-title">Lien </th>
+        					<th class="column-title">Télécharger </th>
+                          </tr>
+                        </thead>
+
+                        <tbody>
+                         	<tr data-th-each="dossier : ${dossiers}" class="even pointer">
+	                          
+								<td class=" " data-th-text="${dossier.candidat.nom +' '+dossier.candidat.prenom}"></td>
+								<td class=" " data-th-text="${dossier.nature}"></td>
+								<td class=" " data-th-text="${dossier.link}"></td>
+								<td>
+									<div class="btn-group btn-group-xs">
+										
+										<a class="btn btn-xs btn-info"><i class="fa fa-trash" data-toggle="tooltip" title="Edit"></i> Télécharger</a>
+									</div>
+								</td>
+						
+		           
+                          
+							</tr>
+                        </tbody>
+                      </table>
+         
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+        </div>
+        <!-- /page content -->    
+  </div>
+
+  <footer>
+    <p layout:fragment="custom-footer">This is some footer content from content page 1</p>
+  </footer>
+  
+
+    <!-- /validator -->
+</body>
+</html>

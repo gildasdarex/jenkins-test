@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorator="layout">
+<head>
+  <title>Programme Emploi Jeune</title>
+</head>
+<body>
+ 
+  <div layout:fragment="content">
+        <!-- page content -->
+			 <!-- page content -->
+		<script type="text/javascript" th:inline="javascript">
+		    /*<![CDATA[*/
+		   
+	    	function upgradeCandidat(url, element){
+		    	  var path= /*[[@{/pej/candidats/valider/}]]*/;
+		    	  console.log('Path:', path);
+		    	  console.log('url: ', url);
+		    	  console.log('Element: ', element);
+		    	  var element1=$(element).find('td > a')[0];
+		    	  console.log('Element1:', $(element1));
+		    	 
+		    	  
+		    	  var validerCandidat=function(jqXHR){
+		    		  console.log('jqXHR.responseText:',jqXHR.responseText);
+		    		  //var currentCandidat = jQuery.parseJSON( jqXHR.responseText );
+	  				  console.log('Ajax response error:',currentCandidat);
+	  				 $(element1).text(currentCandidat.statutcandidat.intitule);
+		    	  }
+		    	  doGet(path+url, validerCandidat);
+	      	}
+	    	 function doGet(url, setCommune) {
+	    		 var data;
+	    		 $.ajax({
+	    			 url : 'http://localhost:8080'  + url,
+	    			 type : 'GET' ,
+	    			 dataType : 'application/json' ,
+	    			 beforeSend : function() {
+	    			 },
+	    			 success : function(data) {
+	    				console.log('Show success response: ', data);
+	    			 },
+	    			 complete : function() {
+	    				console.log('Ajax response complete');
+	    			 },
+	    			 error : function(jqXHR) {
+	    				 setCommune(jqXHR);
+	    			 }
+	    		 })
+	    		 
+	    		 return data;
+	    	}
+	    	 
+		    /*]]>*/
+  </script>	 
+        <div class="right_col" role="main">
+          <div class="">
+
+
+            <div class="clearfix"></div>
+			<div th:with="notifyMessages=${session[T(com.pej.services.NotificationServiceImpl).NOTIFY_MSG_SESSION_KEY]}">	
+				  <div th:each="msg : ${notifyMessages}"  class="alert alert-success alert-dismissible fade in" th:classappend="'alert-'+${#strings.toLowerCase(msg.type)}" role="alert">
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+					</button>
+					<strong th:text="${msg.text}"></strong>
+				  </div>
+				  <span th:if="${notifyMessages}" th:remove="all" th:text="${session.remove(T(com.pej.services.NotificationServiceImpl).NOTIFY_MSG_SESSION_KEY)}"></span>
+			</div>
+            <div class="row">
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <!--<h2  data-th-text="${formation.intitule} +': Liste des candidats non sélectionnés'"></h2>-->
+                      <h2  data-th-text=" 'LISTE DES CANDIDATS NON SELECTIONNES POUR LA FORMATION ' + ${formation.intitule} +"></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <!--<li class="dropdown">-->
+                        <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>-->
+                        <!--<ul class="dropdown-menu" role="menu">-->
+                          <!--<li><a href="#">Settings 1</a>-->
+                          <!--</li>-->
+                          <!--<li><a href="#">Settings 2</a>-->
+                          <!--</li>-->
+                        <!--</ul>-->
+                      <!--</li>-->
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                     <div class="row" >
+							 <a style="margin-left: 8px;" href="#" th:href="@{/pej/candidats/add}" class="btn btn-info"><i class="fa fa-plus"></i> AJOUTER</a>
+					</div>
+                    <div class="table-responsive">
+                      <table id="datatable-buttons" class="table table-striped table-bordered bulk_action">
+                        <thead>
+                          <tr class="headings">
+                            <th>
+                              <input type="checkbox" id="check-all" class="flat"/>
+                            </th>
+                            <th class="column-title">CANDIDAT </th>
+                            <th class="column-title">DEPARTEMENT </th>
+                            <th class="column-title">TELEPHONE </th>
+                            <th class="column-title">SEXE</th>
+                            <th class="column-title">DATE DE NAISSANCE </th>
+                            <!--th class="column-title">Date enregistrement </th>
+                            < th class="column-title">Agent Enregistreur </th>
+                            <th class="column-title">Niveau validation </th-->
+                            <th class="column-title">AGENT </th>
+                            <th class="column-title">STATUT </th>
+                            <th class="column-title no-link last"><span class="nobr">ACTION</span>
+                            </th>
+                            <!-- th class="bulk-actions" colspan="7">
+                              <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+                            </th-->
+                          </tr>
+                        </thead>
+
+                        <tbody>
+                         <tr data-th-each="candidat : ${candidats}" class="even pointer">
+	                            <td class="a-center ">
+	                              <input type="checkbox" class="flat" name="table_records"/>
+	                            </td>
+								<td class=" " data-th-text="${candidat.nom +' '+candidat.prenom}"></td>
+								<td class=" " data-th-text="${candidat.departement}"></td>
+								<td class=" " data-th-text="${candidat.telprincipal}"></td>
+								<td class=" " data-th-text="${candidat.sexe}"></td>
+								<td class=" " data-th-text="${candidat.datenaissance}"></td>
+								<td class=" " data-th-text="${candidat.agent.nom + ' '+candidat.agent.prenom}"></td>
+								<!--td class=" " data-th-text="${candidat.dateenregistrement}"></td>
+							  	<td class="project_progress">
+		                            <div class="progress progress_sm">
+		                              <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="60"></div>
+		                          	</div>
+	                          	</td-->
+		                        <td>
+		                            <a class="btn btn-success btn-xs"  data-th-text="${candidat.statutcandidat.intitule}"></a>
+		                        </td>
+	                            <td class=" ">
+	                            	<!--  -->
+	                            	<a href="#"  class="link btn btn-success btn-xs" th:href="@{'/pej/formationbeneficiaires/' + ${formation.idformation} +'/candidat/'+${candidat.idcandidat}}"><i class="fa fa-check-square-o"></i> AJOUTER </a>
+	                            </td>
+                          
+							</tr>
+                        </tbody>
+                      </table>
+         
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          
+                    <div class="">
+
+
+            <div class="clearfix"></div>
+
+            <div class="row">
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                      <h2  data-th-text=" 'LISTE DES CANDIDATS SELECTIONNES POUR LA FORMATION ' + ${formation.intitule} +"></h2>
+
+                      <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <!--<li class="dropdown">-->
+                        <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>-->
+                        <!--<ul class="dropdown-menu" role="menu">-->
+                          <!--<li><a href="#">Settings 1</a>-->
+                          <!--</li>-->
+                          <!--<li><a href="#">Settings 2</a>-->
+                          <!--</li>-->
+                        <!--</ul>-->
+                      <!--</li>-->
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                     <div class="row" >
+							 <a style="margin-left: 8px;" href="#" th:href="@{/pej/candidats/add}" class="btn btn-info"><i class="fa fa-plus"></i> AJOUTER</a>
+					</div>
+                    <div class="table-responsive">
+                      <table id="datatable-buttons" class="table table-striped table-bordered bulk_action">
+                        <thead>
+                            <tr class="headings">
+                                <th>
+                                    <input type="checkbox" id="check-all" class="flat"/>
+                                </th>
+                                <th class="column-title">CANDIDAT </th>
+                                <th class="column-title">DEPARTEMENT </th>
+                                <th class="column-title">TELEPHONE </th>
+                                <th class="column-title">SEXE</th>
+                                <th class="column-title">DATE DE NAISSANCE </th>
+                                <!--th class="column-title">Date enregistrement </th>
+                                < th class="column-title">Agent Enregistreur </th>
+                                <th class="column-title">Niveau validation </th-->
+                                <th class="column-title">AGENT </th>
+                                <th class="column-title">STATUT </th>
+                                <th class="column-title no-link last"><span class="nobr">ACTION</span>
+                                </th>
+                                <!-- th class="bulk-actions" colspan="7">
+                                  <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+                                </th-->
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                         <tr data-th-each="candidat : ${candidatsformation}" class="even pointer">
+	                            <td class="a-center ">
+	                              <input type="checkbox" class="flat" name="table_records"/>
+	                            </td>
+								<td class=" " data-th-text="${candidat.nom +' '+candidat.prenom}"></td>
+								<td class=" " data-th-text="${candidat.departement}"></td>
+								<td class=" " data-th-text="${candidat.telprincipal}"></td>
+								<td class=" " data-th-text="${candidat.sexe}"></td>
+								<td class=" " data-th-text="${candidat.datenaissance}"></td>
+								<td class=" " data-th-text="${candidat.agent.nom + ' '+candidat.agent.prenom}"></td>
+								<!--td class=" " data-th-text="${candidat.dateenregistrement}"></td>
+							  	<td class="project_progress">
+		                            <div class="progress progress_sm">
+		                              <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="60"></div>
+		                          	</div>
+	                          	</td-->
+		                        <td>
+		                            <a class="btn btn-success btn-xs"  data-th-text="${candidat.statutcandidat.intitule}"></a>
+		                        </td>
+	                            <td class=" ">
+	                            	<!-- th:onclick="${'javascript:upgradeCandidat('+ candidat.idcandidat +', $(this).parent().parent()[0])'}" -->
+	                            	<a href="#"  class="btn btn-xs btn-danger" th:href="@{'/pej/formationbeneficiaires/rm/' + ${formation.idformation} +'/candidat/'+${candidat.idcandidat}}" >
+                                        <i class="fa fa-trash" data-toggle="tooltip" title="Enlever"></i> ENLEVER </a>
+	                            </td>
+                          
+							</tr>
+                        </tbody>
+                      </table>
+         
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /page content -->
+        <!-- /page content -->    
+  </div>
+
+  <footer>
+    <p layout:fragment="custom-footer">This is some footer content from content page 1</p>
+  </footer>
+  
+
+</body>
+</html>

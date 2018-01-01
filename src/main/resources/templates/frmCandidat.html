@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorator="layout">
+<head>
+  <title>PEJ/D&eacute;coupage territoriale</title>
+</head>
+<body>
+ 
+  <div layout:fragment="content">
+  		<script type="text/javascript" th:inline="javascript">
+		    /*<![CDATA[*/
+	    	
+	    	function computeAge(){
+		    	
+				 var dateOfBirth=moment(document.getElementById("datenaissance").value).format("DD/MM/YYYY");
+				 console.log('dateOfBirth: ', dateOfBirth);
+				 var year= moment().diff(dateOfBirth, 'years',false);
+				 document.getElementById("age").value=year;
+				  console.log('Age: ', year);
+				}
+	    	
+
+		    /*]]>*/
+  </script>	
+        <!-- page content -->
+       		 <!-- page content -->
+        <div class="right_col" role="main">
+          <div class="">
+            <div class="page-title">
+              <div class="title_left">
+                <h3>EDITION D'UN CANDIDAT</h3>
+              </div>
+
+            </div>
+            <div class="clearfix"></div>
+			<div th:with="notifyMessages=${session[T(com.pej.services.NotificationServiceImpl).NOTIFY_MSG_SESSION_KEY]}">	
+				  <div th:each="msg : ${notifyMessages}"  class="alert alert-success alert-dismissible fade in" th:classappend="'alert-'+${#strings.toLowerCase(msg.type)}" role="alert">
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+					</button>
+					<strong th:text="${msg.text}"></strong>
+				  </div>
+				  <span th:if="${notifyMessages}" th:remove="all" th:text="${session.remove(T(com.pej.services.NotificationServiceImpl).NOTIFY_MSG_SESSION_KEY)}"></span>
+			</div>
+            <div class="row">
+
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <!--<li class="dropdown">-->
+                        <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>-->
+                        <!--<ul class="dropdown-menu" role="menu">-->
+                          <!--<li><a href="#">Settings 1</a>-->
+                          <!--</li>-->
+                          <!--<li><a href="#">Settings 2</a>-->
+                          <!--</li>-->
+                        <!--</ul>-->
+                      <!--</li>-->
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+
+
+                    <!-- Smart Wizard -->
+               
+                    <div id="wizard" class="form_wizard wizard_horizontal">
+                      <ul class="wizard_steps">
+                        <li>
+                          <a href="#step-1">
+                            <span class="step_no">1</span>
+                            <span class="step_descr">
+                                              Etape n° 1<br />
+                                              <small>Identification fiche</small>
+                                          </span>
+                          </a>
+                        </li>
+                        <li>
+                          <a href="#step-2">
+                            <span class="step_no">2</span>
+                            <span class="step_descr">
+                                              Etape n°2<br />
+                                              <small>Informations d'indentification</small>
+                                          </span>
+                          </a>
+                        </li>
+                        <li>
+                          <a href="#step-3">
+                            <span class="step_no">3</span>
+                            <span class="step_descr">
+                                              Etape n°3<br />
+                                              <small>Informations socio-démographiques</small>
+                                          </span>
+                          </a>
+                        </li>
+                        <li>
+                          <a href="#step-4">
+                            <span class="step_no">4</span>
+                            <span class="step_descr">
+                                              Etape n°4<br />
+                                              <small>Informations spécifiques</small>
+                                          </span>
+                          </a>
+                        </li>
+                      </ul>
+                      <form novalidate="true" class="form-horizontal form-label-left" id="frmCandidat" name="frmCandidat" 
+                      			action="#" th:action="@{/pej/candidats}" th:object="${objCandidat}" method="post">
+	                      <div id="step-1">
+	                      
+	                          <div class="item form-group">
+	                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">DATE D'ENREGISTREMENT <span class="required">*</span>
+	                            </label>
+	                            <div class="col-md-6 col-sm-6 col-xs-12">
+	                              <input type="text" id="dateenregistrement" th:field="*{dateenregistrement}"
+	                               class="form-control col-md-7 col-xs-12"  data-inputmask="'mask': '99/99/9999'" onblur="computeAge()"/>
+	                            </div>
+	                          </div>
+	                          <div class="item form-group">
+	                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="numeroagent">NUMERO D'AGENT ENREGISTREUR <span class="required">*</span>
+	                            </label>
+	                            <div class="col-md-6 col-sm-6 col-xs-12">
+	                              <input type="text" id="numeroagent" th:field="*{numeroagent}" th:required="required" class="form-control col-md-7 col-xs-12"/>
+	                            </div>
+	                          </div>
+	                          <div class="item form-group">
+	                            <label for="numeroagent" class="control-label col-md-3 col-sm-3 col-xs-12">NOM D'AGENT ENREGISTREUR</label>
+	                             <div class="col-md-6 col-sm-6 col-xs-12">
+	                              <input type="text" id="agent"  th:required="required" class="form-control col-md-7 col-xs-12"/>
+	                            </div>
+	                          </div>
+	                         <div class="item form-group">
+	                            <label for="numerofiche" class="control-label col-md-3 col-sm-3 col-xs-12">N° D'ENREGISTREMENT</label>
+	                             <div class="col-md-6 col-sm-6 col-xs-12">
+	                              <input type="text" id="numerofiche" th:field="*{numerofiche}" th:required="required" class="form-control col-md-7 col-xs-12"/>
+	                            </div>
+	                          </div>
+	                      </div>
+	                      <div id="step-2">
+			                          <!-- div class="item form-group">
+			                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Département <span class="required">*</span>
+			                            </label>
+			                            <div class="col-md-6 col-sm-6 col-xs-12">
+			                               <select id="departement" name="departement"  class="form-control">
+				                            	<option data-th-each="departement : ${departements}" th:text="${departement.libdeparteement}" th:value="${departement.codedepartement}"></option>      
+				                           </select>
+			                            </div>
+			                          </div>
+			                          <div class="item form-group">
+			                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Commune<span class="required">*</span>
+			                            </label>
+			                            <div class="col-md-6 col-sm-6 col-xs-12">
+			                              	<select id="commune" name="commune" class="form-control">
+				                            	
+				                            	<option value=""></option>     
+				                           </select>
+			                            </div>
+			                          </div>
+			                          <div class="item form-group">
+			                            <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Arrondissement</label>
+			                             <div class="col-md-6 col-sm-6 col-xs-12">
+			                              		<select id="arrondissement" name="arrondissement" class="form-control">
+				                            		
+				                           			<option value=""></option>
+				                           		</select>
+			                             </div>
+			                          </div>
+			                         <div class="item form-group">
+			                            <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Quartier/Village</label>
+			                             <div class="col-md-6 col-sm-6 col-xs-12">
+			                              		<select id="quartier"   class="form-control"  th:field="*{quartier}">
+				                            		
+				                            		<option value=""></option>    
+				                           		</select>
+			                             </div>
+			                          </div-->
+			                          <!--<div class="item form-group">-->
+			                            <!--<label class="control-label col-md-3 col-sm-3 col-xs-12" for="nommere">Département <span class="required">*</span>-->
+			                            <!--</label>-->
+			                            <!--<div class="col-md-6 col-sm-6 col-xs-12">-->
+				                              <!--<input type="text" data-validate-minmax="10,100" id="localdepartement" th:field="*{localdepartement}" th:required="required" class="form-control col-md-7 col-xs-12"/>-->
+			                            <!--</div>-->
+		                          	 <!--</div>-->
+									  <div class="item form-group">
+										  <label class="control-label col-md-3 col-sm-3 col-xs-12" >DEPARTEMENT <span class="required">*</span>
+										  </label>
+										  <div class="col-md-6 col-sm-6 col-xs-12">
+											  <select id="departement" name="localdepartement" class="form-control" th:required="required" th:field="*{localdepartement}">
+												  <option data-th-each="departement : ${departements}" th:text="${departement.libdeparteement}" th:value="${departement.libdeparteement}"></option>
+											  </select>
+										  </div>
+									  </div>
+									  <div class="item form-group">
+										  <label class="control-label col-md-3 col-sm-3 col-xs-12" >COMMUNE <span class="required">*</span>
+										  </label>
+										  <div class="col-md-6 col-sm-6 col-xs-12">
+											  <select id="commune" name="localcommune" class="form-control" th:required="required" th:field="*{localcommune}">
+												  <option data-th-each="commune : ${communes}" th:text="${commune.libcommune}" th:value="${commune.libcommune}"></option>
+											  </select>
+										  </div>
+									  </div>
+									  <div class="item form-group">
+										  <label class="control-label col-md-3 col-sm-3 col-xs-12" >ARRONDISSEMENT <span class="required">*</span>
+										  </label>
+										  <div class="col-md-6 col-sm-6 col-xs-12">
+											  <select id="arrondissement" name="arrondissement" class="form-control" th:required="required" th:field="*{arrondissement}">
+												  <option data-th-each="arrondissement : ${arrondissements}" th:text="${arrondissement.libarrondissement}" th:value="${arrondissement.libarrondissement}"></option>
+											  </select>
+										  </div>
+									  </div>
+									  <div class="item form-group">
+										  <label class="control-label col-md-3 col-sm-3 col-xs-12" >VILLAGE/QUARTIER <span class="required">*</span>
+										  </label>
+										  <div class="col-md-6 col-sm-6 col-xs-12">
+											  <select id="quartier" name="quartier" class="form-control" th:required="required" th:field="*{quartier}">
+												  <option data-th-each="quartier : ${quartiers}" th:text="${quartier.libquartier}" th:value="${quartier.libquartier}"></option>
+											  </select>
+										  </div>
+									  </div>
+
+		                          	  <div class="item form-group">
+			                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="nommere">AUTORITE LOCALE <span class="required">*</span>
+			                            </label>
+			                            <div class="col-md-6 col-sm-6 col-xs-12">
+				                              <input type="text" data-validate-minmax="10,100" id="nomautoritelocale" th:field="*{nomautoritelocale}" th:required="required" class="form-control col-md-7 col-xs-12"/>
+			                            </div>
+		                          	 </div>
+		                          	  <div class="item form-group">
+			                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="nommere">TITRE DE L'AUTORITE<span class="required">*</span>
+			                            </label>
+			                            <div class="col-md-6 col-sm-6 col-xs-12">
+				                              <input type="text" data-validate-minmax="10,100" id="titreautoritelocale" th:field="*{titreautoritelocale}" th:required="required" class="form-control col-md-7 col-xs-12"/>
+			                            </div>
+		                          	 </div>
+			                          <div class="item form-group">
+			                            <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">NOM DU CANDIDAT</label>
+			                             <div class="col-md-6 col-sm-6 col-xs-12">
+			                              <input type="text" th:field="*{nom}"  id="nom" th:required="required"  class="form-control col-md-7 col-xs-12"/>
+			                            </div>
+			                          </div>
+			                          <div class="item form-group">
+			                            <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">PRENOM DU CANDIDAT</label>
+			                             <div class="col-md-6 col-sm-6 col-xs-12">
+			                              <input type="text" th:field="*{prenom}"  id="prenom" th:required="required" class="form-control col-md-7 col-xs-12"/>
+			                            </div>
+			                          </div>
+			                          <div class="item form-group">
+			                            <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">TELEPHONE PRINCIPAL</label>
+			                             <div class="col-md-6 col-sm-6 col-xs-12">
+			                              <input type="text" th:field="*{telprincipal}"  data-inputmask="'mask': '(+22\\9) 99999999'"  id="telprincipal" th:required="required"  class="form-control col-md-7 col-xs-12"/>
+			                            </div>
+			                          </div>
+			                           <div class="item form-group">
+			                            <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">TELEPHONE ALTERNATIF</label>
+			                             <div class="col-md-6 col-sm-6 col-xs-12">
+			                              <input type="text" th:field="*{telalternatif}" data-inputmask="'mask': '(+22\\9) 99999999'" id="telalternatif"  th:required="required" class="form-control col-md-7 col-xs-12"/>
+			                            </div>
+			                          </div>
+			                          <div class="item form-group">
+			                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="nompere">NOM ET PRENOM DU PERE <span class="required">*</span>
+			                            </label>
+			                            <div class="col-md-6 col-sm-6 col-xs-12">
+				                              <input type="text" data-validate-minmax="10,100" id="nompere" th:field="*{nompere}" th:required="required" class="form-control col-md-7 col-xs-12"/>
+			                            </div>
+		                          	 </div>
+		                          	 <div class="item form-group">
+			                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="nommere">NOM ET PRENOM DE LA MERE <span class="required">*</span>
+			                            </label>
+			                            <div class="col-md-6 col-sm-6 col-xs-12">
+				                              <input type="text" data-validate-minmax="10,100" id="nommere" th:field="*{nommere}" th:required="required" class="form-control col-md-7 col-xs-12"/>
+			                            </div>
+		                          	 </div>
+			                          <div class="item form-group">
+			                            <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">DOCUMENT D'IDENTIFICATION</label>
+			                            <div class="col-md-6 col-sm-6 col-xs-12">
+				                            <select th:field="*{docidentite}"  id="docidentite" th:required="required" class="form-control">
+			                            		<option value="CNI">Carte nationale d'identité</option> 
+			                            		<option value="Passeport">Passeport</option>
+			                            		<option value="Permis de conduire">Permis de conduire</option>
+			                            		<option value="Carte LEPI">Carte LEPI</option>
+			                            		<option value="Acte de naissance">Acte de naissance</option>      
+			                           		</select>
+				                         </div>
+			                          
+			                          </div>
+			                          <div class="item form-group">
+			                            <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">N° DU DOCUMENT</label>
+			                             <div class="col-md-6 col-sm-6 col-xs-12">
+			                              <input type="text" id="refdocidentite" th:field="*{refdocidentite}"  th:required="required" class="form-control col-md-7 col-xs-12"/>
+			                            </div>
+			                          </div>
+	                      </div>
+	                      <div id="step-3">
+			                          <div class="item form-group">
+			                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">SEXE <span class="required">*</span>
+			                            </label>
+			                            <div class="col-md-6 col-sm-6 col-xs-12">
+				                            <select id="sexe" name="scolarise" class="form-control"  th:field="*{sexe}">
+			                            		<option value="Masculin">Masculin</option> 
+			                            		<option value="Féminin">Féminin</option>      
+			                           		</select>
+				                         </div>
+		                          	 </div>
+		                          	 <div class="item form-group">
+			                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">DATE DE NAISSANCE<span class="required">*</span>
+			                            </label>
+			                            <div class="col-md-6 col-sm-6 col-xs-12">
+			                              <input type="text" data-inputmask="'mask': '99/99/9999'" id="datenaissance" th:field="*{datenaissance}" th:required="required" class="form-control col-md-7 col-xs-12" onblur="computeAge()"/>
+			                            </div>
+			                          </div>
+			                          <div class="item form-group">
+			                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">AGE<span class="required">*</span>
+			                            </label>
+			                            <div class="col-md-6 col-sm-6 col-xs-12">
+			                              <input type="text" id="age" th:field="*{age}" th:required="required" class="form-control col-md-7 col-xs-12"/>
+			                            </div>
+			                          </div>
+			                          <div class="item form-group">
+			                            <label for="languesparlees" class="control-label col-md-3 col-sm-3 col-xs-12">LANGUES PARLEES</label>
+			                             <div class="col-md-6 col-sm-6 col-xs-12">
+			                              <input type="text" id="languesparlees" th:field="*{languesparlees}" th:required="required" class="form-control col-md-7 col-xs-12"/>
+			                            </div>
+			                          </div>
+			                         <div class="item form-group">
+			                            <label for="situationmatrimoniale" class="control-label col-md-3 col-sm-3 col-xs-12">SITUATION MATRIMONIALE</label>
+			                             <div class="col-md-6 col-sm-6 col-xs-12">
+			                               <select id="situationmatrimoniale"  class="form-control"  th:field="*{situationmatrimoniale}">
+			                            		<option value="Célibataire(Jamais marié)">Célibataire(Jamais marié)</option> 
+			                            		<option value="Marié(e) en union libre">Marié(e) en union libre</option>
+			                            		<option value="Divorcé(e)">Divorcé(e)</option>
+			                            		<option value="Veuf(ve)">Veuf(ve)</option>     
+			                           		</select>
+			                            </div>
+			                          </div>
+			                          <div class="item form-group">
+			                            <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">LIEN DE PARENTE</label>
+			                             <div class="col-md-6 col-sm-6 col-xs-12">
+			                                 <select id="parentechefmenage"  class="form-control"  th:field="*{parentechefmenage}">
+			                            		<option value="Chef du ménage">Chef du ménage</option> 
+			                            		<option value="Epoux/Epouse du chef de ménage">Epoux/Epouse du chef de ménage</option>
+			                            		<option value="Fils/Fille du chef de ménage">Fils/Fille du chef de ménage</option>
+			                            		<option value="Frère/Soeur du chef de ménage">Frère/Soeur du chef de ménage</option>
+			                            		<option value="Neveu/Nièce du chef de ménage">Neveu/Nièce du chef de ménage</option>
+			                            		<option value="Autre parent">Autre parent</option>
+			                            		<option value="Sans lien de parenté">Sans lien de parenté</option>      
+			                           		</select>
+			                            </div>
+			                          </div>
+			                          <div class="item form-group">
+			                            <label for="nbpersonnemenage" class="control-label col-md-3 col-sm-3 col-xs-12">NOMBRE DE PERSONNES DANS LE MENAGE</label>
+			                             <div class="col-md-6 col-sm-6 col-xs-12">
+			                              <input type="text" id="nbpersonnemenage" th:field="*{nbpersonnemenage}" th:required="required" class="form-control col-md-7 col-xs-12"/>
+			                            </div>
+			                          </div>
+			                            <div class="item form-group">
+			                              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="menagebeneficiaire">BENEFICIAIRE PSDCC <span class="required">*</span>
+			                              </label>
+			                            <div class="col-md-6 col-sm-6 col-xs-12">
+				                         <select id="menagebeneficiaire" name="scolarise" class="form-control"  th:field="*{menagebeneficiaire}">
+			                            		<option value="1">OUI</option> 
+			                            		<option value="0">NON</option>      
+			                           		</select>
+				                         </div>
+		                          	 </div>
+	                      </div>
+	                      <div id="step-4">
+			                          <div class="item form-group">
+			                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">SCOLARITE EN COURS <span class="required">*</span>
+			                            </label>
+			                            <div class="col-md-6 col-sm-6 col-xs-12">
+			                               	<select id="scolarise" name="scolarise" class="form-control"  th:field="*{scolarise}">
+			                            		<option value="1">OUI</option> 
+			                            		<option value="0">NON</option>      
+			                           		</select>
+				                         </div>
+		                          	 </div>
+		                          	 <div class="item form-group">
+			                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">DERNIER NIVEAU SCOLAIRE<span class="required">*</span>
+			                            </label>
+			                            <div class="col-md-6 col-sm-6 col-xs-12">
+			                              <select id="scolarise" name="scolarise" class="form-control"  th:field="*{scolarise}">
+			                            		<option value="CP">CP</option> 
+			                            		<option value="CE1">CE1</option>
+			                            		<option value="CE2">CE2</option>
+			                            		<option value="CM1">CM1</option>
+			                            		<option value="CM2">CM2</option>
+			                            		<option value="Sixième">Sixième</option>
+			                            		<option value="Cinquième">Cinquième</option>
+			                            		<option value="Quatrième">Quatrième</option>
+			                            		<option value="Troisième">Troisième</option>
+			                            		<option value="Seconde">Seconde</option>
+			                            		<option value="Première">Première</option>
+			                            		<option value="Terminale">Terminale</option>
+			                            		<option value="Terminale">Supérieur</option>
+			                            		<option value="Autre">Autre</option>      
+			                           		</select>
+			                            </div>
+			                          </div>
+			                          <div class="item form-group">
+			                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="lecture">CAPACITE A LIRE<span class="required">*</span>
+			                            </label>
+			                            <div class="col-md-6 col-sm-6 col-xs-12">
+	                              	       	<select id="lecture" name="scolarise" class="form-control"  th:field="*{lecture}">
+			                            		<option value="1">OUI</option> 
+			                            		<option value="0">NON</option>      
+			                           		</select>
+			                            </div>
+			                          </div>
+			                          <div class="item form-group">
+			                            <label for="ecriture" class="control-label col-md-3 col-sm-3 col-xs-12">CAPACITE A REDIGER</label>
+			                             <div class="col-md-6 col-sm-6 col-xs-12">
+	                              	    	<select id="ecriture" class="form-control"  th:field="*{ecriture}">
+			                            		<option value="1">OUI</option> 
+			                            		<option value="0">NON</option>      
+			                           		</select>
+			                            </div>
+			                          </div>
+			                         <div class="item form-group">
+			                            <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">QUALIFICATION PERSONNELLE</label>
+			                             <div class="col-md-6 col-sm-6 col-xs-12">
+			                              
+			                              	<select id="qualificationpersonelle" th:field="*{ecriture}" class="form-control" >
+			                            		<option value="Auncune qualification">Auncune qualification</option> 
+			                            		<option value="Titulaire du CQP">Titulaire du CQP</option>
+			                            		<option value="Titulaire du CQM">Titulaire du CQM</option>
+			                            		<option value="Attestation d'apprentissage">Attestation d'apprentissage</option>
+			                            		<option value="Titulaire des EFAT">Titulaire des EFAT</option>
+			                            		<option value="Qualification professionnelle">Qualification professionnelle</option>
+			                            		<option value="Autre formation pro">Autre formation pro</option>      
+			                           		</select>
+			                            </div>
+			                          </div>
+			                          <div class="item form-group">
+			                            <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">TRAVAIL DURANT LES 3 DERNIERS MOIS</label>
+			                             <div class="col-md-6 col-sm-6 col-xs-12">
+			                          		<select id="worklastmonth" class="form-control"  th:field="*{worklastmonth}">
+			                            		<option value="1">OUI</option> 
+			                            		<option value="0">NON</option>      
+			                           		</select>
+			                            </div>
+			                          </div>
+			                    
+			                          <div class="item form-group">
+			                            <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">RECHERCHE DE TRAVAIL DURANT LES 3 DERNIERS MOIS</label>
+			                             <div class="col-md-6 col-sm-6 col-xs-12">
+			                       			<select id="recherchetravail" class="form-control"  th:field="*{recherchetravail}">
+			                            		<option value="1">OUI</option> 
+			                            		<option value="0">NON</option>      
+			                           		</select>
+			                            </div>
+			                          </div>
+			                           <div class="item form-group">
+			                            <label for="motifnonrecherche" class="control-label col-md-3 col-sm-3 col-xs-12">MOTIF NON RECHERCHE</label>
+			                             <div class="col-md-6 col-sm-6 col-xs-12">
+			                              <input th:required="required" type="text" id="motifnonrecherche" th:field="*{motifnonrecherche}" class="form-control col-md-7 col-xs-12"/>
+			                            </div>
+			                          </div>
+			                          <div class="item form-group">
+			                            <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">ACTIVITE ACTUELLE PRINCIPALE</label>
+			                             <div class="col-md-6 col-sm-6 col-xs-12">
+			                                 <select id="activiteactuelle" th:field="*{activiteactuelle}" class="form-control" th:required="required">
+			                            		<option value="Agriculture">Agriculture</option> 
+			                            		<option value="Elevage">Elevage</option>
+			                            		<option value="Pêche/Pisciculture">Pêche/Pisciculture</option>
+			                            		<option value="Transformation agro-alimentaire">Transformation agro-alimentaire</option>
+			                            		<option value="Artisanat">Artisanat</option>
+			                            		<option value="Commerce">Commerce</option>
+			                            		<option value="Autre">Autre</option>      
+			                           		</select>
+			                            </div>
+			                          </div>
+			                           <div class="item form-group">
+			                            <label for="motifnonrecherche" class="control-label col-md-3 col-sm-3 col-xs-12">PRECISION ACTIVITE</label>
+			                             <div class="col-md-6 col-sm-6 col-xs-12">
+			                              <input type="text" id="precisionactivite" th:field="*{precisionactivite}" th:required="required" class="form-control col-md-7 col-xs-12"/>
+			                            </div>
+			                          </div>
+			                          <div class="item form-group">
+			                            <label for="asoncompte" class="control-label col-md-3 col-sm-3 col-xs-12">TRAVAIL A SON PROPRE COMPTE</label>
+			                             <div class="col-md-6 col-sm-6 col-xs-12">
+			                 				<select id="asoncompte" class="form-control"  th:field="*{asoncompte}">
+			                            		<option value="1">OUI</option> 
+			                            		<option value="0">NON</option>      
+			                           		</select>
+			                            </div>
+			                          </div>
+	                            	 <div class="item form-group">
+			                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="nbmoistravail">NOMBRE DE MOIS DE TRAVAIL PAR AN <span class="required">*</span>
+			                            </label>
+			                            <div class="col-md-6 col-sm-6 col-xs-12">
+				                              <input type="text" id="nbmoistravail" th:field="*{nbmoistravail}" th:required="required" class="form-control col-md-7 col-xs-12"/>
+			                            </div>
+		                          	 </div>
+		                          	 <div class="item form-group">
+			                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="nbjoursmoyen">NOMBRE DE JOURS DE TRAVAIL PAR MOIS <span class="required">*</span>
+			                            </label>
+			                            <div class="col-md-6 col-sm-6 col-xs-12">
+				                              <input type="text" id="nbjoursmoyen" th:field="*{nbjoursmoyen}" th:required="required" class="form-control col-md-7 col-xs-12"/>
+			                            </div>
+		                          	 </div>
+	                          	 	 <div class="item form-group">
+			                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="nbheuremoyen">NOMBRE D'HEURE DE TRAVAIL PAR JOUR <span class="required">*</span>
+			                            </label>
+			                            <div class="col-md-6 col-sm-6 col-xs-12">
+				                              <input type="text" id="nbheuremoyen" th:field="*{nbheuremoyen}" th:required="required" class="form-control col-md-7 col-xs-12"/>
+			                            </div>
+		                          	 </div>
+	                          	  	 <div class="item form-group">
+			                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="revenumoyen">REVENU MENSUEL <span class="required">*</span>
+			                            </label>
+			                            <div class="col-md-6 col-sm-6 col-xs-12">
+				                             <select id="revenumoyen" th:field="*{revenumoyen}" class="form-control">
+			                            		<option value="Non payé">Non payé</option> 
+			                            		<option value="Moins de 15 000 FCFA">Moins de 15 000 FCFA</option>
+			                            		<option value="15 000 à 31 625">15 000 à 31 625</option>
+			                            		<option value="31 625 à 44 000">31 625 à 44 000</option>
+			                            		<option value="44 000 à 88 000">44 000 à 88 000</option>
+			                            		<option value="88 000 à 176 000">88 000 à 176 000</option>
+			                            		<option value="176 000 à 352 000">176 000 à 352 000</option>
+			                            		<option value="352 000 à 704 000">352 000 à 704 000</option>
+			                            		<option value="Plus de 704 000 FCFA">Plus de 704 000 FCFA</option>
+			                            		
+			                                 
+			                           		</select>
+			                            </div>
+		                          	 </div>
+	                          	  	 <div class="item form-group">
+			                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="domainesouhait">DOMAINE D'ACTIVITE SOUHAITE <span class="required">*</span>
+			                            </label>
+			                            <div class="col-md-6 col-sm-6 col-xs-12">
+				                             <select id="domainesouhait" class="form-control"  th:field="*{domainesouhait}">
+			                     				 <option value="Agriculture">Agriculture</option> 
+			                            		<option value="Elevage">Elevage</option>
+			                            		<option value="Pêche/Pisciculture">Pêche/Pisciculture</option>
+			                            		<option value="Transformation agro-alimentaire">Transformation agro-alimentaire</option>
+			                            		<option value="Artisanat">Artisanat</option>
+			                            		<option value="Commerce">Commerce</option>
+			                            		<option value="Autre">Autre</option>
+			                            	</select>
+			                            </div>
+		                          	 </div>
+		                          	 <div class="item form-group">
+			                            <label for="motifnonrecherche" class="control-label col-md-3 col-sm-3 col-xs-12">PRECISION</label>
+			                             <div class="col-md-6 col-sm-6 col-xs-12">
+			                              <input type="text" id="precisionactivitesouhaiter" th:field="*{precisionactivitesouhaiter}" th:required="required" class="form-control col-md-7 col-xs-12"/>
+			                            </div>
+			                          </div>
+		                          	  <div class="item form-group">
+			                            <label for="travailgroupe" class="control-label col-md-3 col-sm-3 col-xs-12">TRAVAIL EN GROUPE OU EN COOPERATIVE</label>
+			                             <div class="col-md-6 col-sm-6 col-xs-12">
+											<select id="travailgroupe" class="form-control"  th:field="*{travailgroupe}">
+			                            		<option value="1">OUI</option> 
+			                            		<option value="0">NON</option>      
+			                           		</select>
+			                             </div>
+			                          </div>
+			                          <div class="item form-group">
+			                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="numcarteagratter">N° CARTE <span class="required">*</span>
+			                            </label>
+			                            <div class="col-md-6 col-sm-6 col-xs-12">
+				                              <input type="text" data-validate-minmax="10,100" id="numcarteagratter" th:field="*{numcarteagratter}" th:required="required" class="form-control col-md-7 col-xs-12"/>
+			                            </div>
+		                          	 </div>
+		                          	   	 <div class="item form-group">
+			                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="nommere">POINT REPRE 1 <span class="required">*</span>
+			                            </label>
+			                            <div class="col-md-6 col-sm-6 col-xs-12">
+				                              <input type="text" data-validate-minmax="10,100" id="pointrepere1" th:field="*{pointrepere1}" th:required="required" class="form-control col-md-7 col-xs-12"/>
+			                            </div>
+		                          	 </div>
+		                          	  <div class="item form-group">
+			                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="nommere">POINT REPRE 2 <span class="required">*</span>
+			                            </label>
+			                            <div class="col-md-6 col-sm-6 col-xs-12">
+				                              <input type="text" data-validate-minmax="10,100" id="pointrepere2" th:field="*{pointrepere2}" th:required="required" class="form-control col-md-7 col-xs-12"/>
+			                            </div>
+		                          	 </div>
+		                          	 <div class="item form-group">
+			                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="nommere">SMID <span class="required">*</span>
+			                            </label>
+			                            <div class="col-md-6 col-sm-6 col-xs-12">
+				                              <input type="text" data-validate-minmax="10,100" id="smid" th:field="*{smid}" th:required="required" class="form-control col-md-7 col-xs-12"/>
+			                            </div>
+		                          	 </div>
+		                       
+	                      </div>
+                       </form>
+
+                    </div>
+                    <!-- End SmartWizard Content -->
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /page content -->
+        <!-- /page content -->    
+  </div>
+
+  <footer>
+    <p layout:fragment="custom-footer">This is some footer content from content page 1</p>
+  </footer>
+  
+  <!-- validator -->
+   
+    <!-- /validator -->
+</body>
+</html>36

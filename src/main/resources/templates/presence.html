@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout">
+<head>
+    <title>Programme Emploi Jeune</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <!-- page content -->
+    <!-- page content -->
+    <div class="right_col" role="main">
+        <div class="">
+
+
+            <div class="clearfix"></div>
+            <div th:with="notifyMessages=${session[T(com.pej.services.NotificationServiceImpl).NOTIFY_MSG_SESSION_KEY]}">
+                <!--<div th:each="msg : ${notifyMessages}" class="alert alert-success alert-dismissible fade in"-->
+                     <!--th:classappend="'alert-'+${#strings.toLowerCase(msg.type)}" role="alert">-->
+                    <!--<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span-->
+                            <!--aria-hidden="true">×</span>-->
+                    <!--</button>-->
+                    <!--<strong th:text="${msg.text}"></strong>-->
+                <!--</div>-->
+                <span th:if="${notifyMessages}" th:remove="all"
+                      th:text="${session.remove(T(com.pej.services.NotificationServiceImpl).NOTIFY_MSG_SESSION_KEY)}"></span>
+            </div>
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2 data-th-text=" 'CALENDRIER DE PRESENCE POUR LA FORMATION ' + ${formation.intitule} "></h2>
+                            <ul class="nav navbar-right panel_toolbox">
+                                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                </li>
+                                <li><a class="close-link"><i class="fa fa-close"></i></a>
+                                </li>
+                            </ul>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="x_content">
+                            <div class="row">
+                                <div class="col-md-2 col-sm-2 col-xs-2 pull-left">
+                                    <a class="btn btn-xs btn-primary" href="#"
+                                       th:href="@{'/pej/formationbeneficiaires/presence/'+ ${formation.idformation} + '?page=' + ${previousPage}}">
+                                        <i class="fa fa-plus"
+                                           data-toggle="tooltip"
+                                           title="precedent"></i>
+                                        DATES PRECEDENTES</a>
+                                </div>
+
+                                <div class="col-md-2 col-sm-2 col-xs-2 pull-right">
+                                    <a class="btn btn-xs btn-primary" href="#"
+                                       th:href="@{'/pej/formationbeneficiaires/presence/'+ ${formation.idformation} + '?page=' + ${nextPage}}">
+                                        <i class="fa fa-plus"
+                                           data-toggle="tooltip"
+                                           title="suivant"></i>
+                                        DATES SUIVANTES</a>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12 col-xs-12">
+                                    <div class="table-responsive">
+                                        <table id="datatable-buttons" class="table table-striped table-bordered display nowrap"
+                                               cellspacing="0" width="100%">
+                                            <thead>
+                                            <tr class="headings">
+                                                <th class="column-title"></th>
+                                                <th data-th-each="currentFormationDate : ${currentFormationDates}"
+                                                    data-th-text="${#dates.format(currentFormationDate,'dd/MM/yyyy')}"
+                                                    class="column-title"></th>
+
+                                            </tr>
+                                            </thead>
+
+                                            <tbody>
+                                            <tr data-th-each="candidat : ${candidats}" class="even pointer">
+                                                <td class=" " data-th-text="${candidat.identite}"></td>
+                                                <td data-th-each="currentFormationDate : ${currentFormationDates}"
+                                                    data-th-switch="${candidat.isPresent(currentFormationDate)}"
+                                                    class="column-title">
+
+                                                    <!--<div class="btn-group btn-group-xs" th:case="'PRESENT'">-->
+                                                    <!--<a class="btn btn-xs btn-primary" href="#"><i class="fa fa-plus"-->
+                                                    <!--data-toggle="tooltip"-->
+                                                    <!--title="present"></i>-->
+                                                    <!--PRESENT</a>-->
+                                                    <!--</div>-->
+
+                                                    <div class="btn-group btn-primary" th:case="'PRESENT'">
+                                                        <button type="button" class="btn btn-primary btn-xs">PRESENT
+                                                        </button>
+                                                        <button type="button" class="btn btn-primary btn-xs dropdown-toggle"
+                                                                data-toggle="dropdown" aria-expanded="false">
+                                                            <span class="caret"></span>
+                                                            <span class="sr-only">Toggle Dropdown</span>
+                                                        </button>
+                                                        <ul class="dropdown-menu" role="menu">
+                                                            <li><a href="#"
+                                                                   th:href="@{'/pej/presence/old/add/'+ ${candidat.idCandidat} + '/' + ${candidat.formation.idformation} + '/' + ${#dates.format(currentFormationDate,'dd-MM-yyyy')}}">
+                                                                <i></i>Marquer comme absent</a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+
+                                                    <div class="btn-group btn-danger" th:case="'ABSENT'">
+                                                        <button type="button" class="btn btn-danger btn-xs">ABSENT
+                                                        </button>
+                                                        <button type="button" class="btn btn-danger btn-xs dropdown-toggle" th:if="${candidat.isCurrentDate(currentFormationDate)}"
+                                                                data-toggle="dropdown" aria-expanded="false">
+                                                            <span class="caret"></span>
+                                                            <span class="sr-only">Toggle Dropdown</span>
+                                                        </button>
+                                                        <ul class="dropdown-menu" role="menu" th:if="${candidat.isCurrentDate(currentFormationDate)}">
+                                                            <li><a href="#"
+                                                                   th:href="@{'/pej/presence/old/rm/'+ ${candidat.idCandidat} + '/' + ${candidat.formation.idformation} + '/' + ${#dates.format(currentFormationDate,'dd-MM-yyyy')}}">
+                                                                <i></i>Marquer comme present</a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+
+                                                    <div class="btn-group btn-warning" th:case="'DATE A VENIR'">
+                                                        <button type="button" class="btn btn-warning btn-xs">DATE A VENIR
+                                                        </button>
+                                                        <button type="button" class="btn btn-warning btn-xs dropdown-toggle"
+                                                                data-toggle="dropdown" aria-expanded="false">
+                                                            <span class="caret"></span>
+                                                            <span class="sr-only">Toggle Dropdown</span>
+                                                        </button>
+                                                        <ul class="dropdown-menu" role="menu">
+                                                            <li><a href="#"
+                                                                   th:href="@{'/pej/presence/add/'+ ${candidat.idCandidat} + '/' + ${candidat.formation.idformation} + '/' + ${#dates.format(currentFormationDate,'dd-MM-yyyy')}}">
+                                                                <i></i>Marquer comme present</a>
+                                                            </li>
+                                                            <li><a href="#"
+                                                                   th:href="@{'/pej/presence/rm/'+ ${candidat.idCandidat} + '/' + ${candidat.formation.idformation} + '/' + ${#dates.format(currentFormationDate,'dd-MM-yyyy')}}">
+                                                                <i></i>Marquer comme absent</a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    <!-- /page content -->
+</div>
+
+<footer>
+    <p layout:fragment="custom-footer">This is some footer content from content page 1</p>
+</footer>
+
+
+</body>
+</html>

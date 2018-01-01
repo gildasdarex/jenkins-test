@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+    <!--<springProperty scope="contextParameters" name="sentryDns" source="sentry.dns"/>-->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- Log message format -->
+        <encoder>
+            <pattern>"%d{yyyy-MM-dd/HH:mm:ss.SSS/zzz} [%t] %-5level %logger{36} - %msg%n"</pattern>
+        </encoder>
+    </appender>
+    <!-- Configure the Sentry appender, overriding the logging threshold to the WARN level -->
+    <!--<appender name="Sentry" class="com.getsentry.raven.logback.SentryAppender">-->
+        <!--<dsn>${sentryDns}</dsn>-->
+        <!--<serverName>pej</serverName>-->
+        <!--<filter class="ch.qos.logback.classic.filter.ThresholdFilter">-->
+            <!--<level>ERROR</level>-->
+        <!--</filter>-->
+    <!--</appender>-->
+    <!-- Ned appender to write to file -->
+    <appender name="DEBUGOUT" class="ch.qos.logback.core.FileAppender">
+        <!-- Name of the file where the log messages are written -->
+        <file>logs/pej-std.log</file>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>DEBUG</level>
+        </filter>
+        <encoder>
+            <pattern>"%d{yyyy-MM-dd/HH:mm:ss.SSS/zzz} [%t] %-5level %logger{36} - %msg%n"</pattern>
+        </encoder>
+    </appender>
+    <appender name="ERROROUT" class="ch.qos.logback.core.FileAppender">
+        <!-- Name of the file where the log messages are written -->
+        <file>logs/pej-error.log</file>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+        <encoder>
+            <pattern>"%d{yyyy-MM-dd/HH:mm:ss.SSS/zzz} [%t] %-5level %logger{36} - %msg%n"</pattern>
+        </encoder>
+    </appender>
+    <appender name="SECURITYOUT" class="ch.qos.logback.core.FileAppender">
+        <!-- Name of the file where the log messages are written -->
+        <file>logs/pej-security.log</file>
+        <encoder>
+            <pattern>"%d{yyyy-MM-dd/HH:mm:ss.SSS/zzz} [%t] %-5level %logger{36} - %msg%n"</pattern>
+        </encoder>
+    </appender>
+    <logger name="warnLoger" level="WARN">
+        <appender-ref ref="DEBUGOUT" />
+    </logger>
+    <logger name="debugLogger" level="DEBUG">
+        <appender-ref ref="DEBUGOUT" />
+    </logger>
+    <logger name="errorLogger" level="ERROR">
+        <appender-ref ref="ERROROUT" />
+    </logger>
+    <logger name="org.springframework.web" level="ALL">
+        <appender-ref ref="DEBUGOUT"/>
+    </logger>
+    <logger name="org.springframework.security" level="ALL">
+        <appender-ref ref="SECURITYOUT" />
+    </logger>
+    <!-- Setting the root level of logging to INFO -->
+    <root level="info">
+        <appender-ref ref="DEBUGOUT" />
+        <appender-ref ref="ERROROUT" />
+    </root>
+</configuration>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
+   
+  </head>
+  <body>
+    <div class="col-md-3 left_col">
+          <div class="left_col scroll-view">
+            <div class="navbar nav_title" style="border: 0;">
+              <a href="index.html" class="site_title"><i class="fa fa-paw"></i> <span>PEJ</span></a>
+            </div>
+
+            <div class="clearfix"></div>
+
+            <!-- menu profile quick info -->
+            <div class="profile">
+              <div class="profile_pic">
+                <img th:src="@{/images/nopicture.PNG}" alt="" class="img-circle profile_img"/>
+              </div>
+              <div class="profile_info">
+                <span>Bienvenue,</span>
+                <!--<h2><span th:text="${session[T(com.pej.services.UserDetailsServiceImpl).USER_NAME]}">USER_NAME</span></h2>-->
+              </div>
+            </div>
+            <!-- /menu profile quick info -->
+
+            <br />
+
+            <!-- sidebar menu -->
+            <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+              <div class="menu_section">
+                <!--<h3><span th:text="${session.USER_ROLE}">US</span></h3>-->
+                <ul class="nav side-menu">
+                 <li ><a><i class="fa fa-home"></i> STATISTIQUES <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a  href="http://pej.anpe-bj.org/index.php" >Tableaux de statistiques</a></li>
+                    </ul>
+                  </li>
+                  <li ><a><i class="fa fa-edit"></i> GESTION DES CANDIDATS <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="#" th:href="@{/pej/candidats}">CANDIDATS</a></li>
+                      <!--<li><a href="#" th:href="@{/pej/candidats/upload}">Chargement de fichier</a></li>-->
+                      <li><a href="#" th:href="@{/pej/candidats/tirage}">TIRAGE DES CANDIDATS</a></li>
+                      <li><a href="#" th:href="@{/pej/cooperatives}">GROUPE D'APPRENANTS</a></li>
+
+                      <!--<li><a href="#" th:href="@{/pej/decoupement}">Découpement territoriale</a></li>-->
+
+                      <li><a href="#" th:href="@{/pej/statutcandidats}">STATUS DES CANDIDATS</a></li>
+                       <!--<li><a href="#" th:href="@{/pej/materiels}">Matériels</a></li>-->
+                        <!--<li><a href="#" th:href="@{/pej/fournisseurs}">Fournisseurs</a></li>-->
+                    </ul>
+                  </li>
+                  <li><a><i class="fa fa-desktop"></i> GESTION DES FORMATIONS <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                    <li><a href="#" th:href="@{/pej/lots}">LOTS</a></li>
+                    <li><a href="#" th:href="@{/pej/cabinets}">CABINETS</a></li>
+                    <li><a href="#" th:href="@{/pej/typeformations}">TYPE DE FORMATION</a></li>
+
+                      <li><a href="#" th:href="@{/pej/formations}">FORMATIONS</a></li>
+                    <li ><a href="#" th:href="@{/pej/fformations}">FORMATION DES FORMATEURS</a></li>
+                    </ul>
+                  </li>
+
+                  <li><a><i class="fa fa-bar-chart-o"></i>GESTION DES ACTEURS <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                       <li><a href="#" th:href="@{/pej/usermamagement}">UTILISATEURS</a></li>
+                        <li><a href="#" th:href="@{/pej/formateurs}">FORMATEURS</a></li>
+                        <li><a href="#" th:href="@{/pej/agents}">AGENTS RECRUTEUR</a></li>
+                    </ul>
+                  </li>
+
+                    <li><a><i class="fa fa-desktop"></i> GESTION DES ENTREPRISES <span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu">
+                            <li><a href="#" th:href="@{/pej/entreprises}">ENTREPRISES</a></li>
+
+                        </ul>
+                    </li>
+
+
+                    <li ><a><i class="fa fa-edit"></i> INFORMATIONS  CONNEXES <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                        <li><a href="#" th:href="@{/pej/antennes}">ANTENNE</a></li>
+                        <li><a href="#" th:href="@{/pej/candidats/upload}">CHARGEMENT DE FICHIER</a></li>
+                        <li><a href="#" th:href="@{/pej/decoupement}">DECOUPEMENT TERRITORIAL</a></li>
+                        <li><a href="#" th:href="@{/pej/materiels}">MATERIELS</a></li>
+                        <li><a href="#" th:href="@{/pej/fournisseurs}">FOURNISSEUR</a></li>
+                        <li><a href="#" th:href="@{/pej/materiels}">MATERIELS</a></li>
+                        <li><a href="#" th:href="@{/pej/fournisseurs}">FOURNISSEURS</a></li>
+                    </ul>
+                </li>
+        
+                </ul>
+              </div>
+
+
+            </div>
+            <!-- /sidebar menu -->
+
+            <!-- /menu footer buttons -->
+            <!-- div class="sidebar-footer hidden-small">
+              <a data-toggle="tooltip" data-placement="top" title="Settings">
+                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+              </a>
+              <a data-toggle="tooltip" data-placement="top" title="FullScreen">
+                <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
+              </a>
+              <a data-toggle="tooltip" data-placement="top" title="Lock">
+                <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
+              </a>
+              <a data-toggle="tooltip" data-placement="top" title="Logout">
+                <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
+              </a>
+            </div-->
+            <!-- /menu footer buttons -->
+          </div>
+        </div>
+  </body>
+</html>

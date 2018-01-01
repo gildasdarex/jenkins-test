@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorator="layout">
+<head>
+  <title>PEJ/Calendrier</title>
+</head>
+<body>
+ 
+  <div layout:fragment="content">
+                 <!-- page content -->
+        <div class="right_col" role="main">
+          <div class="">
+            <div class="page-title">
+              <div class="title_left">
+
+                <h3>Calendrier</h3>
+              </div>
+
+              <div class="title_right">
+                <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+                  <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search for..."/>
+                    <span class="input-group-btn">
+                      <button class="btn btn-default" type="button">Go!</button>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="clearfix"></div>
+			<div th:with="notifyMessages=${session[T(com.pej.services.NotificationServiceImpl).NOTIFY_MSG_SESSION_KEY]}">
+				  <div th:each="msg : ${notifyMessages}"  class="alert alert-success alert-dismissible fade in" th:classappend="'alert-'+${#strings.toLowerCase(msg.type)}" role="alert">
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+					</button>
+					<strong th:text="${msg.text}"></strong>
+				  </div>
+				  <span th:if="${notifyMessages}" th:remove="all" th:text="${session.remove(T(com.pej.services.NotificationServiceImpl).NOTIFY_MSG_SESSION_KEY)}"></span>
+			</div>
+            <div class="row">
+
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Calendrier</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                          <li><a href="#">Settings 1</a>
+                          </li>
+                          <li><a href="#">Settings 2</a>
+                          </li>
+                        </ul>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+
+                  <div class="x_content">
+                      <input type="hidden" id="listeSuivies" th:value="${listesuivies}"  class="form-control col-md-7 col-xs-12"/>
+                      <div id='calendar'></div>
+                      <!-- Your custom menu with dropdown-menu as default styling -->
+                      <div id="context-menu">
+                          <ul class="dropdown-menu" role="menu">
+                              <li id="presence"><a tabindex="-1">Vérifier présence</a></li>
+                              <li id="supprimer"><a tabindex="-1">Supprimer</a></li>
+
+                          </ul>
+                      </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+           
+          </div>
+        </div>
+        <!-- /page content -->
+      <!-- calendar modal -->
+      <div id="CalenderModalNew" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+              <div class="modal-content">
+
+                  <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                      <h4 class="modal-title" id="myModalLabel">Créer nouveau suivie</h4>
+                  </div>
+                  <form id="antoform" class="form-horizontal calender" role="form"   th:object="${objSuivies}" method="post">
+                  <div class="modal-body">
+                      <div id="testmodal" style="padding: 5px 20px;">
+
+                              <div class="item form-group" style="display:none">
+                                  <label for="idsuivie" class="control-label col-md-3 col-sm-3 col-xs-12">ID</label>
+                                  <div class="col-md-6 col-sm-6 col-xs-12">
+                                      <input type="text" id="idsuivie" th:field="*{idsuivie}"  class="form-control col-md-7 col-xs-12"/>
+                                  </div>
+                              </div>
+                              <div class="form-group">
+                                  <label class="col-sm-3 control-label">Date de début</label>
+                                  <div class="col-sm-9">
+                                      <input type="text" class="form-control" th:field="*{datedebut}" id="datedebut" data-inputmask="'mask': '99/99/99'"></input>
+                                  </div>
+                              </div>
+                              <div class="form-group">
+                                  <label class="col-sm-3 control-label">Date de fin</label>
+                                  <div class="col-sm-9">
+                                      <input type="text" class="form-control" th:field="*{datefin}" data-inputmask="'mask': '99/99/99'" id="datefin"></input>
+                                  </div>
+                              </div>
+                              <div class="form-group" style="display:none;">
+                              <label class="col-sm-3 control-label">Entreprise</label>
+                              <div class="col-sm-9">
+                                  <input type="text" class="form-control" th:field="*{entreprise}"  id="entreprise" disabled="disabled"></input>
+                              </div>
+                          </div>
+                          <div class="form-group" style="display:none;">
+                              <label class="col-sm-3 control-label">Latitude</label>
+                              <div class="col-sm-9">
+                                  <input type="text" class="form-control" th:field="*{entreprise.latitude}"  id="latitude" disabled="disabled"></input>
+                              </div>
+                          </div>
+                          <div class="form-group" style="display:none;">
+                              <label class="col-sm-3 control-label">Longitude</label>
+                              <div class="col-sm-9">
+                                  <input type="text" class="form-control" th:field="*{entreprise.longitude}"  id="longitude" disabled="disabled"></input>
+                              </div>
+                          </div>
+                              <div class="form-group" style="display:none;">
+                                  <label class="col-sm-3 control-label">Formateur</label>
+                                  <div class="col-sm-9">
+                                      <input type="text" class="form-control" th:field="*{formateur}"  id="formateur" disabled="disabled"></input>
+                                  </div>
+                              </div>
+                              <div class="form-group" style="display:none;">
+                                  <label class="col-sm-3 control-label">Année</label>
+                                  <div class="col-sm-9">
+                                      <input type="text" class="form-control" th:field="*{annees}"  id="annees" disabled="disabled"></input>
+                                  </div>
+                              </div>
+                          <div class="form-group" style="display:none;">
+                              <label class="col-sm-3 control-label">Période</label>
+                              <div class="col-sm-9">
+                                  <input type="text" class="form-control" th:field="*{periode}"  id="periode" disabled="disabled"></input>
+                              </div>
+                          </div>
+                              <div class="form-group" style="display:none;">
+                                  <label class="col-sm-3 control-label">Statut</label>
+                                  <div class="col-sm-9">
+                                      <input type="text" class="form-control" th:field="*{statut}" id="statut" disabled="disabled"></input>
+                                  </div>
+                              </div>
+
+
+                      </div>
+                  </div>
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-default antoclose" data-dismiss="modal">Fermer</button>
+                      <button type="button" class="btn btn-primary antosubmit">Créer</button>
+                  </div>
+                  </form>
+              </div>
+          </div>
+      </div>
+      <div id="CalenderModalEdit" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+              <div class="modal-content">
+
+                  <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                      <h4 class="modal-title" id="myModalLabel2">Edit Calendar Entry</h4>
+                  </div>
+                  <div class="modal-body">
+
+                      <div id="testmodal2" style="padding: 5px 20px;">
+
+                      </div>
+                  </div>
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-default antoclose2" data-dismiss="modal">Close</button>
+                      <button type="button" class="btn btn-primary antosubmit2">Save changes</button>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+      <div id="fc_create" data-toggle="modal" data-target="#CalenderModalNew"></div>
+      <div id="fc_edit" data-toggle="modal" data-target="#CalenderModalEdit"></div>
+      <!-- /calendar modal -->
+
+  </div>
+
+  <footer>
+    <p layout:fragment="custom-footer">This is some footer content from content page 1</p>
+  </footer>
+  
+  <!-- validator -->
+    <script th:inline="javascript">
+ 		// <![CDATA[
+      // initialize the validator function
+      validator.message.date = 'not a real date';
+	  console.log('Javascript function execution');
+      // validate a field on "blur" event, a 'select' on 'change' event & a '.reuired' classed multifield on 'keyup':
+      $('frmDepartement')
+        .on('blur', 'input[required], input.optional, select.required', validator.checkField)
+        .on('change', 'select.required', validator.checkField)
+        .on('keypress', 'input[required][pattern]', validator.keypress);
+
+      $('.multi.required').on('keyup blur', 'input', function() {
+        validator.checkField.apply($(this).siblings().last()[0]);
+      });
+
+      $('frmDepartement').submit(function(e) {
+    	console.log("Cacth user action");
+        e.preventDefault();
+        var submit = true;
+
+        // evaluate the form using generic validaing
+        if (!validator.checkAll($(this))) {
+          submit = false;
+        }
+
+        if (submit)
+          this.submit();
+
+        return false;
+      });
+      // ]]>
+    </script>
+    <!-- /validator -->
+</body>
+</html>

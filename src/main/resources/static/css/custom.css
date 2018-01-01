@@ -1,0 +1,43 @@
+ul#messages li {
+display: block;
+width: 80%;
+margin: 5px auto;
+text-align: center;
+padding: 5px;
+border-radius: 5px;
+}
+ul#messages li.info {
+background: #7f7;
+}
+ul#messages li.error {
+background: #d00;
+color: white;
+}
+.hover_img a { position:relative; }
+.hover_img a span { position:absolute; display:none; z-index:99; }
+.hover_img a:hover span { display:block; }
+
+.image-upload {
+    display: block;
+    overflow: hidden;
+    width: 50px;
+}
+
+.display-formateur-image{
+    max-width: 200px !important;
+}
+
+.image-upload input {
+    visibility:hidden;
+    width:0;
+    height:0
+}
+
+.image-upload img {
+    max-width: 34px;
+    max-height: 34px;
+}
+
+.select2{
+    width:100% !important;
+}

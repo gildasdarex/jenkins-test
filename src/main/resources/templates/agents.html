@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorator="layout">
+<head>
+  <title>PEJ/Agents</title>
+</head>
+<body>
+ 
+  <div layout:fragment="content">
+        <!-- page content -->
+			 <!-- page content -->
+        <div class="right_col" role="main">
+          <div class="">
+
+
+            <div class="clearfix"></div>
+			<div th:with="notifyMessages=${session[T(com.pej.services.NotificationServiceImpl).NOTIFY_MSG_SESSION_KEY]}">	
+				  <div th:each="msg : ${notifyMessages}"  class="alert alert-success alert-dismissible fade in" th:classappend="'alert-'+${#strings.toLowerCase(msg.type)}" role="alert">
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+					</button>
+					<strong th:text="${msg.text}"></strong>
+				  </div>
+				  <span th:if="${notifyMessages}" th:remove="all" th:text="${session.remove(T(com.pej.services.NotificationServiceImpl).NOTIFY_MSG_SESSION_KEY)}"></span>
+			</div>
+            <div class="row">
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>LISTE DES AGENTS</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                     <div class="row" >
+                         <a style="margin-left: 8px;" href="#" th:href="@{/pej/agents/add}" class="btn btn-info"><i class="fa fa-plus"></i> AJOUTER</a>
+                         <a style="margin-left: 8px;" th:href="@{/pej/agents/upload}"  class="btn btn-success"><i class="fa fa-check-square-o"></i>CHARGER UN FICHIER</a>
+                     </div>
+                    <div class="table-responsive">
+                      <table id="datatable-buttons" class="table table-striped table-bordered bulk_action" cellspacing="0" width="100%">
+                        <thead>
+                          <tr class="headings">
+                            <th class="column-title">NOM PRENOM </th>
+                            <th class="column-title">N° AGENT </th>
+                            <th class="column-title">TELEPHONE</th>
+                            <th class="column-title no-link last"><span class="nobr">ACTION</span>
+                            </th>
+                            <th class="bulk-actions" colspan="7">
+                              <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+                            </th>
+                          </tr>
+                        </thead>
+
+                        <tbody>
+                         <tr data-th-each="agent : ${agents}" class="even pointer">
+								<td class=" " data-th-text="${agent.getIdentite()}"></td>
+								<td class=" " data-th-text="${agent.numeroagent}"></td>
+								<td class=" " data-th-text="${agent.telephone}"></td>
+								<td>
+									<div class="btn-group btn-group-xs">
+										<a class="btn btn-default" th:href="@{'/pej/agents/' + ${agent.idagent}}"><i class="fa fa-edit" data-toggle="tooltip" title="Edit"></i> MODIFIER</a>
+										<a class="btn btn-xs btn-danger" th:href="@{'/pej/agents/rm/' + ${agent.idagent}}"><i class="fa fa-trash" data-toggle="tooltip" title="Edit"></i> SUPPRIMER</a>
+									</div>
+								</td>
+						
+		           
+                          
+							</tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /page content -->
+        <!-- /page content -->    
+  </div>
+
+  <footer>
+    <p layout:fragment="custom-footer">This is some footer content from content page 1</p>
+  </footer>
+  
+
+</body>
+</html>

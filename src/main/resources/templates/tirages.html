@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorator="layout">
+<head>
+  <title>Programme Emploi Jeune</title>
+</head>
+<body>
+ 
+  <div layout:fragment="content">
+        <!-- page content -->
+			 <!-- page content -->
+		<script type="text/javascript" th:inline="javascript">
+		    /*<![CDATA[*/
+		   
+	    	function upgradeCandidat(url, element){
+		    	  var path= /*[[@{/pej/candidats/valider/}]]*/;
+		    	  console.log('Path:', path);
+		    	  console.log('url: ', url);
+		    	  console.log('Element: ', element);
+		    	  var element1=$(element).find('td > a')[0];
+		    	  console.log('Element1:', $(element1));
+		    	 
+		    	  
+		    	  var validerCandidat=function(jqXHR){
+		    		  try {
+		    			  console.log('jqXHR.responseText:',jqXHR.responseText);
+			    		  var currentCandidat = jQuery.parseJSON( jqXHR.responseText );
+		  				  console.log('Ajax response error:',currentCandidat);
+		  				  console.log('element1: ',element1);
+		  				 $(element1).text(currentCandidat.statutcandidat.intitule);
+		  				 (function(){
+		  					new PNotify({
+		                        title: 'Programme Emploi Jeune',
+		                        text: 'Statut modifié avec succès',
+		                        type: 'success',
+		                        styling: 'bootstrap3'
+		                    });
+		  				 })();
+		    			  
+		    		  }
+		    		  catch(err) {
+							 
+						  new PNotify({
+                              title: 'Programme Emploi Jeune',
+                              text: 'Erreur lors du changement de statut.',
+                              type: 'error',
+                              styling: 'bootstrap3'
+                          });
+					  }
+		    		  
+
+		    	  }
+		    	  doGet(path+url, validerCandidat);
+	      	}
+	    	 function doGet(url, setCommune) {
+	    		 var data;
+	    		 $.ajax({
+	    			 url : 'http://localhost:8080'  + url,
+	    			 type : 'GET' ,
+	    			 dataType : 'application/json' ,
+	    			 beforeSend : function() {
+	    			 },
+	    			 success : function(data) {
+	    				console.log('Show success response: ', data);
+	    			 },
+	    			 complete : function() {
+	    				console.log('Ajax response complete');
+	    			 },
+	    			 error : function(jqXHR) {
+	    				 setCommune(jqXHR);
+	    			 }
+	    		 })
+	    		 
+	    		 return data;
+	    	}
+	    	 /*Récupérer l'id des candidats à valider*/
+	    	function getIds(){
+	    		var oTable = $('#datatable-buttons').DataTable();
+	    		/*console.log('oTable: ',oTable);
+	    		var sData = $('tr', oTable.fnGetNodes()).serialize();
+	    		console.log('sData: ',sData);
+	    		
+				var rowcollection=$('#datatable-buttons').dataTable().fnGetNodes();
+				console.log('rowcollection: ',rowcollection);
+				var datas=$('#datatable-buttons').dataTable().fnGetData();
+				console.log('rows: ',rowcollection[1]);
+	    		var rrr=$('#datatable-buttons').DataTable().rows({selected: false});
+	    		console.log('rrr: ',rrr);
+	    		rowcollection.each(function(elem){
+	    		    var checkbox_value = $(elem).val();
+	    		    console.log('checkbox_value: ',checkbox_value);
+	    		});*/
+	    		var idcandidats="";
+	    		var ids = $.map(oTable.rows('.selected').data(), function (item) {
+	    			console.log('item: ',item);
+	    			console.log('item[1]: ',item[1]);
+	    			idcandidats+=item[1]+"@";
+	    	        //return item[0]
+	    	    });
+	    	    console.log(ids)
+	    	    console.log('idcandidats: ', idcandidats);
+	    	    return idcandidats;
+	    	    //alert(oTable.rows('.selected').data().length + ' row(s) selected');
+	    	    
+	    	    
+	    	    
+	    	}
+	    	
+	    	
+	    	
+	    	function upgradeCandidats(){
+		    	  var path= /*[[@{/pej/candidats/validermax/}]]*/;
+		    	  var url=getIds();
+		    	  console.log('Path:', path);
+		    	  console.log('url: ', url);
+		    	
+		    	 
+		    	  
+		    	  var validerCandidats=function(jqXHR){
+		    		  try {
+		    			  console.log('jqXHR.responseText:',jqXHR.responseText);
+			    		  var currentCandidat = jQuery.parseJSON( jqXHR.responseText );
+		  				  console.log('Ajax response error:',currentCandidat);
+		  				  console.log('element1: ',element1);
+		  				 $(element1).text(currentCandidat.statutcandidat.intitule);
+		  				 (function(){
+		  					new PNotify({
+		                        title: 'Programme Emploi Jeune',
+		                        text: 'Statut modifié avec succès',
+		                        type: 'success',
+		                        styling: 'bootstrap3'
+		                    });
+		  				 })();
+		    			  
+		    		  }
+		    		  catch(err) {
+							 
+						  new PNotify({
+                            title: 'Programme Emploi Jeune',
+                            text: 'Erreur lors du changement de statut.',
+                            type: 'error',
+                            styling: 'bootstrap3'
+                        });
+					  }
+		    		  
+
+		    	  }
+		    	  var xhr = new XMLHttpRequest();
+		    	  xhr.open('GET', path+url, false);
+		    	  xhr.send();
+		    	  //doGet(path+url, validerCandidats);
+	      	}
+	    	 
+		    /*]]>*/
+  </script>	 
+        <div class="right_col" role="main">
+          <div class="">
+
+
+            <div class="clearfix"></div>
+			<div th:with="notifyMessages=${session[T(com.pej.services.NotificationServiceImpl).NOTIFY_MSG_SESSION_KEY]}">	
+				  <div th:each="msg : ${notifyMessages}"  class="alert alert-success alert-dismissible fade in" th:classappend="'alert-'+${#strings.toLowerCase(msg.type)}" role="alert">
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+					</button>
+					<strong th:text="${msg.text}"></strong>
+				  </div>
+				  <span th:if="${notifyMessages}" th:remove="all" th:text="${session.remove(T(com.pej.services.NotificationServiceImpl).NOTIFY_MSG_SESSION_KEY)}"></span>
+			</div>
+			           <div class="row">
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>TIRAGE</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <!--<li class="dropdown">-->
+                        <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>-->
+                        <!--<ul class="dropdown-menu" role="menu">-->
+                          <!--<li><a href="#">Settings 1</a>-->
+                          <!--</li>-->
+                          <!--<li><a href="#">Settings 2</a>-->
+                          <!--</li>-->
+                        <!--</ul>-->
+                      <!--</li>-->
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <form id="frmTirage"  class="frmPej form-horizontal form-label-left" action="#"  th:action="@{/pej/candidats/tirage}" th:object="${objTirage}" method="post">
+				    	<div class="item form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">COMMUNE <span class="required">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                               <select id="commune" name="commune" class="select2_single form-control" th:field="*{commune}">
+	                            	<option data-th-each="commune : ${communes}" th:text="${commune.libcommune}" th:value="${commune.codecommune}"></option>      
+	                           </select>
+                            </div>
+                          </div>
+                          <div class="item form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">ORDRE <span class="required">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                               <select id="ordre" name="ordre" class="select2_single form-control" th:field="*{ordre}">
+	                            	<option  value="Croissant">Croissant</option>
+	                            	<option  value="Décroissant">Décroissant</option>      
+	                           </select>
+                            </div>
+                          </div>
+				       <div class="item form-group">
+                            <label for="numerofiche" class="control-label col-md-3 col-sm-3 col-xs-12" > NOMBRE</label>
+                             <div class="col-md-6 col-sm-6 col-xs-12">
+                              <input type="text" id="nombre"  th:required="required" th:field="*{nombre}" class="form-control col-md-7 col-xs-12"/>
+                            </div>
+                        </div>
+					   	
+					    <div class="ln_solid"></div>
+					    <div class="form-group">
+					      <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+					        <button type="reset" class="btn btn-primary">ANNULER</button>
+					        <button type="submit" class="btn btn-success">TIRER</button>
+					      </div>
+					    </div>
+					
+					  </form>
+
+                   
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Liste des candidats</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                          <li><a href="#">Settings 1</a>
+                          </li>
+                          <li><a href="#">Settings 2</a>
+                          </li>
+                        </ul>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                     <div class="row" >
+							 <a style="margin-left: 8px;" href="#" th:href="@{/pej/candidats/add}" class="btn btn-info"><i class="fa fa-plus"></i> AJOUTER</a>
+							 <a style="margin-left: 8px;" href="#" onclick="upgradeCandidats()"  class="btn btn-success"><i class="fa fa-check-square-o"></i> VALIDER</a>
+					</div>
+                    <div class="table-responsive">
+                      <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%" >
+                        <thead>
+                          <tr class="headings">
+                            <th>
+                              <input type="checkbox" id="check-all" class="flat call-checkbox"/>
+                            </th>
+                            <th class="column-title" style="display:none;">CANDIDAT ID</th>
+                            <th class="column-title">CANDIDAT</th>
+                            <th class="column-title">DEPARTEMENT </th>
+                            <th class="column-title">TELEPHONE </th>
+                            <th class="column-title">SEXE</th>
+                            <th class="column-title">DATE DE NAISSANCE</th>
+                            <!--th class="column-title">Date enregistrement </th>
+                            < th class="column-title">Agent Enregistreur </th>
+                            <th class="column-title">Niveau validation </th-->
+                            <th class="column-title">AGENT </th>
+                            <th class="column-title">STATUT </th>
+                            <th class="column-title no-link last"><span class="nobr">ACTION</span>
+                            </th>
+                            <!-- th class="bulk-actions" colspan="7">
+                              <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+                            </th-->
+                          </tr>
+                        </thead>
+
+                        <tbody>
+                         <tr data-th-each="candidat : ${candidats}" class="even pointer">
+	                            <td class="a-center ">
+	                              <input type="checkbox" class="flat" name="table_records"/>
+	                            </td>
+	                            <td class=" " data-th-text="${candidat.numcarteagratter}" style="display:none;"></td>
+								<td class=" " data-th-text="${candidat.nom +' '+candidat.prenom}"></td>
+								<td class=" " data-th-text="${candidat.quartier.arrondissement.commune.departement.libdeparteement}"></td>
+								<td class=" " data-th-text="${candidat.telprincipal}"></td>
+								<td class=" " data-th-text="${candidat.sexe}"></td>
+								<td class=" " data-th-text="${#dates.format(candidat.datenaissance,'dd/MM/yyyy')}" ></td>
+								<td class=" " data-th-text="${candidat.agent.nom + ' '+candidat.agent.prenom}"></td>
+								<!--td class=" " data-th-text="${candidat.dateenregistrement}"></td>
+							  	<td class="project_progress">
+		                            <div class="progress progress_sm">
+		                              <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="60"></div>
+		                          	</div>
+	                          	</td-->
+		                        <td>
+		                            <a class="btn btn-success btn-xs"  data-th-text="${candidat.statutcandidat.intitule}"></a>
+		                        </td>
+	                            <td class=" ">
+	                                <!-- Split button -->
+				                    <div class="btn-group">
+				                      <button type="button" class="btn btn-primary btn-xs">ACTIONS</button>
+				                      <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+				                        <span class="caret"></span>
+				                        <span class="sr-only">Toggle Dropdown</span>
+				                      </button>
+				                      <ul class="dropdown-menu" role="menu">
+				                        <li><a  th:href="@{'/pej/candidats/' + ${candidat.idcandidat}}"><i class="fa fa-edit" data-toggle="tooltip" title="Edit"></i> Modifier</a></li>
+				                      
+				                        <li><a href="#" th:onclick="${'javascript:upgradeCandidat('+ candidat.idcandidat +', $(this).parent().parent().parent().parent().parent()[0])'}" ><i class="fa fa-check-square-o"></i> Valider </a>
+				                        </li>
+				                         <li><a href="#" th:href="@{'/pej/candidats/don/' + ${candidat.idcandidat}}"> <i class="fa fa-file-pdf-o"></i>Accorder don</a>
+				                        </li>
+				                        
+				                      </ul>
+				                    </div>
+	                            </td>
+                          
+							</tr>
+                        </tbody>
+                      </table>
+         
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- DEBUT MODAL DON -->
+             <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+	<div class="modal-content">
+
+	  <div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+		</button>
+		<h4 class="modal-title" id="myModalLabel">ACCORD DE DON</h4>
+	  </div>
+	  <div class="modal-body">
+		<h4>Text in a modal</h4>
+		<form id="frmAgent"  class="form-horizontal form-label-left"  method="post">
+				    	<div class="item form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">DEPARTEMENT <span class="required">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                               <select id="departement" name="departement" class="select2_single form-control" >
+	                            	<option data-th-each="departement : ${departements}" th:text="${departement.libdeparteement}" th:value="${departement.codedepartement}"></option>      
+	                           </select>
+                            </div>
+                        </div>
+				       <div class="item form-group">
+                            <label for="numerofiche" class="control-label col-md-3 col-sm-3 col-xs-12">INTITULE</label>
+                             <div class="col-md-6 col-sm-6 col-xs-12">
+                              <input type="text" id="libantenne"  th:required="required" class="form-control col-md-7 col-xs-12"/>
+                            </div>
+                        </div>
+					    <div class="item form-group">
+                            <label for="nom" class="control-label col-md-3 col-sm-3 col-xs-12">NOM</label>
+                             <div class="col-md-6 col-sm-6 col-xs-12">
+                              <input type="text" id="responsable" th:required="required" class="form-control col-md-7 col-xs-12"/>
+                            </div>
+                        </div>
+                        <div class="item form-group">
+                            <label for="nom" class="control-label col-md-3 col-sm-3 col-xs-12">TELEPHONE</label>
+                             <div class="col-md-6 col-sm-6 col-xs-12">
+                              <input type="text" id="numpresponsable"  th:required="required" class="form-control col-md-7 col-xs-12"/>
+                            </div>
+                        </div>
+                        
+                        
+					    <div class="ln_solid"></div>
+					    <div class="form-group">
+					      <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+									<button type="button" class="btn btn-default" data-dismiss="modal">CLOSE</button>
+								<button type="button" class="btn btn-primary">SAVE CHANGES</button>
+						      </div>
+					    </div>
+					
+					  </form>
+	  </div>
+
+	</div>
+  </div>
+</div>
+            <!-- FIN MODAL DON -->
+        </div>
+        <!-- /page content -->
+        <!-- /page content -->    
+  </div>
+
+  <footer>
+    <p layout:fragment="custom-footer">This is some footer content from content page 1</p>
+  </footer>
+  
+
+</body>
+</html>

@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorator="layout">
+<head>
+  <title>PEJ</title>
+</head>
+<body>
+ 
+  <div layout:fragment="content">
+                 <!-- page content -->
+           <script type="text/javascript" th:inline="javascript">
+		    /*<![CDATA[*/
+		   
+	
+					console.log('Configure datatable');
+				   
+	    	 
+		    /*]]>*/
+  </script>	 
+        <div class="right_col" role="main">
+          <div class="">
+            <div class="page-title">
+              <div class="title_left">
+                <h3>DECOUPAGE TERRITORIAL</h3>
+              </div>
+
+              <div class="title_right">
+                <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+                  <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search for..."/>
+                    <span class="input-group-btn">
+                      <button class="btn btn-default" type="button">RECHERCHER!</button>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="clearfix"></div>
+
+            <div class="row">
+   			<div th:with="notifyMessages=${session[T(com.pej.services.NotificationServiceImpl).NOTIFY_MSG_SESSION_KEY]}">	
+				  <div th:each="msg : ${notifyMessages}"  class="alert alert-success alert-dismissible fade in" th:classappend="'alert-'+${#strings.toLowerCase(msg.type)}" role="alert">
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+					</button>
+					<strong th:text="${msg.text}"></strong>
+				  </div>
+				  <span th:if="${notifyMessages}" th:remove="all" th:text="${session.remove(T(com.pej.services.NotificationServiceImpl).NOTIFY_MSG_SESSION_KEY)}"></span>
+			</div>
+             <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>LISTE DES DEPARTEMENTS<small></small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                          <li><a href="#">Importer donn&eacute;es</a>
+                          </li>
+                          <li><a href="#">Exporter donn&eacute;es</a>
+                          </li>
+                        </ul>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                   <div class="table-responsive">
+						<div class="row">
+							 <a href="#" th:href="@{/pej/departement}" class="btn btn-info"><i class="fa fa-plus"></i> AJOUTER</a>
+			
+						</div>
+						<table id="datatable-departements" class="table table-striped table-bordered bulk_action">
+							<thead>
+								<tr>
+								  <th>CODE</th>
+								  <th>LIBELLE</th>
+								  <th>DESCRIPTION</th>
+								   <th>ACTION</th>
+								</tr>
+							</thead>
+							<tbody>
+							<tr data-th-each="departement : ${departements}">
+								<td data-th-text="${departement.codedepartement}"></td>
+								<td data-th-text="${departement.libdeparteement}"></td>
+								<td data-th-text="${departement.description}"></td>
+								<td>
+									<div class="btn-group btn-group-xs">
+										<a class="btn btn-default" th:href="@{'/pej/departement/' + ${departement.codedepartement}}"><i class="fa fa-edit" data-toggle="tooltip" title="Edit"></i> MODIFIER</a>
+										<a class="btn btn-xs btn-danger"><i class="fa fa-trash" data-toggle="tooltip" title="Edit"></i> SUPPRIMER</a>
+									</div>
+								</td>
+							</tr>
+							</tbody>
+						</table>
+					</div>
+                  </div>
+                </div>
+              </div>	
+
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>LISTE DES COMMUNES<small></small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                          <li><a href="#">Importer donn&eacute;es</a>
+                          </li>
+                          <li><a href="#">Exporter donn&eacute;es</a>
+                          </li>
+                        </ul>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+					<div class="row">
+							
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">SELECTIONNER DEPARTEMENT</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <select class="select2_single form-control" tabindex="-1">
+                            <option data-th-each="departement : ${departements}" th:text="${departement.libdeparteement}" th:value="${departement.codedepartement}"></option>
+                          
+                          </select>
+                        
+                        </div>
+                       <div class="col-md-3 col-sm-3 col-xs-12">
+                       <a href="#" th:href="@{/pej/commune}" class="btn btn-info"><i class="fa fa-plus"></i> AJOUTER</a>
+                      </div>
+						</div>
+						</div>
+						<div class="table-responsive">
+						<table class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%" id="datatable-communes">
+							<thead>
+								<tr>
+								  <th>CODE</th>
+								  <th>LIBELLE</th>
+								  <th>DESCRIPTION</th>
+								   <th>DEPARTEMENT</th>
+								   <th>ACTION</th>
+								</tr>
+							</thead>
+							<tbody>
+							<tr data-th-each="commune : ${communes}">
+								<td data-th-text="${commune.codecommune}"></td>
+								<td data-th-text="${commune.libcommune}"></td>
+								<td data-th-text="${commune.description}"></td>
+								<td data-th-text="${commune.departement.libdeparteement}"></td>
+								<td>
+									<div class="btn-group btn-group-xs">
+										<a class="btn btn-default" th:href="@{'/pej/commune/' + ${commune.codecommune}}"><i class="fa fa-edit" data-toggle="tooltip" title="Edit"></i> Modifier</a>
+										<a class="btn btn-xs btn-danger"><i class="fa fa-trash" data-toggle="tooltip" title="Edit"></i> Supprimer</a>
+									</div>
+								</td>
+							</tr>
+							</tbody>
+						</table>
+						</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="clearfix"></div>
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>LISTE DES ARRONDISSEMENTS<small></small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                          <li><a href="#">Importer donn&eacute;es</a>
+                          </li>
+                          <li><a href="#">Exporter donn&eacute;es</a>
+                          </li>
+                        </ul>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+					<div class="row">
+							
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">SELECTIONNER COMMUNE</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <select class="select2_single form-control" tabindex="-1" id="communelist">
+                            <!-- option data-th-each="departement : ${departements}" th:text="${departement.libdeparteement}" th:value="${departement.codedepartement}"></option-->
+                          
+                          </select>
+                        
+                        </div>
+                       <div class="col-md-3 col-sm-3 col-xs-12">
+                       <a href="#" th:href="@{/pej/decoupement/arrondissement/add}" class="btn btn-info"><i class="fa fa-plus"></i> AJOUTER</a>
+                      </div>
+						</div>
+						</div>
+						<div class="table-responsive">
+						<table class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%" id="datatable-arrondissements">
+							<thead>
+								<tr>
+								  <th>CODE</th>
+								  <th>LIBELLE</th>
+								  <th>DESCRIPTION</th>
+								   <th>COMMUNE</th>
+								   <th>ACTION</th>
+								</tr>
+							</thead>
+							<tbody>
+							<tr data-th-each="arrondissement : ${arrondissements}">
+								<td data-th-text="${arrondissement.codearrondissement}"></td>
+								<td data-th-text="${arrondissement.libarrondissement}"></td>
+								<td data-th-text="${arrondissement.description}"></td>
+								<td data-th-text="${arrondissement.commune.libcommune}"></td>
+								<td>
+									<div class="btn-group btn-group-xs">
+										<a class="btn btn-default" th:href="@{'/pej/arrondissement/' + ${arrondissement.codearrondissement}}"><i class="fa fa-edit" data-toggle="tooltip" title="Edit"></i> MODIFIER</a>
+										<a class="btn btn-xs btn-danger"><i class="fa fa-trash" data-toggle="tooltip" title="Edit"></i> SUPPRIMER</a>
+									</div>
+								</td>
+							</tr>
+							</tbody>
+						</table>
+						</div>
+                  </div>
+                </div>
+              </div>
+              
+            <div class="clearfix"></div>
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>LISTE DES QUARTIERS<small></small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                          <li><a href="#">Importer donn&eacute;es</a>
+                          </li>
+                          <li><a href="#">Exporter donn&eacute;es</a>
+                          </li>
+                        </ul>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+					<div class="row">
+							
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">SELECTIONNER COMMUNE</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <select class="select2_single form-control" tabindex="-1" id="communelist">
+                            <!-- option data-th-each="departement : ${departements}" th:text="${departement.libdeparteement}" th:value="${departement.codedepartement}"></option-->
+                          </select>
+                        
+                        </div>
+                       <div class="col-md-3 col-sm-3 col-xs-12">
+                       <a href="#" th:href="@{/pej/decoupement/quartier/add}" class="btn btn-info"><i class="fa fa-plus"></i> Ajouter</a>
+                      </div>
+						</div>
+						</div>
+						<div class="table-responsive">
+						<table class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%" id="datatable-arrondissements">
+							<thead>
+								<tr>
+								  <th>CODE</th>
+								  <th>LIBELLE</th>
+								  <th>DESCRIPTION</th>
+								   <th>ARRONDISSEMENT</th>
+								   <th>ACTION</th>
+								</tr>
+							</thead>
+							<tbody>
+							<tr data-th-each="quartier : ${quartiers}">
+								<td data-th-text="${quartier.idquartier}"></td>
+								<td data-th-text="${quartier.libquartier}"></td>
+								<td data-th-text="${quartier.description}"></td>
+								<td data-th-text="${quartier.arrondissement.libarrondissement}"></td>
+								<td>
+									<div class="btn-group btn-group-xs">
+										<a class="btn btn-default" th:href="@{'/pej/quartier/' + ${quartier.idquartier}}"><i class="fa fa-edit" data-toggle="tooltip" title="Edit"></i> MODIFIER</a>
+										<a class="btn btn-xs btn-danger"><i class="fa fa-trash" data-toggle="tooltip" title="Edit"></i> SUPPRIMER</a>
+									</div>
+								</td>
+							</tr>
+							</tbody>
+						</table>
+						</div>
+                  </div>
+                </div>
+              </div>
+            
+            </div>
+            <!-- START MODAL DEPARTEMENT -->
+   	        <div id="modalDepartement" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
+               <div class="modal-dialog modal-lf">
+                 <div class="modal-content">
+                   <div class="modal-header">
+                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">x</span>
+                     </button>
+                     <h4 class="modal-title" id="myModalLabel">Département</h4>
+                   </div>
+                                  
+                   <div class="modal-body">
+                     <form id="frmDepartement"  class="form-horizontal form-label-left"  action="#" th:action="@{/home}" th:object="${objDepartement}" method="post">
+            		      <div class="form-group" th:class="${#fields.hasErrors('libdeparteement')}? has-error">
+		                    <label  class="col-sm-2 control-label" for="inputEmail3">Département</label>
+		                    <div class="col-sm-10">
+		                     <input type="text" th:field="*{libdeparteement}"  id="libbdepartement" placeholder="departement" class="form-control"></input>          
+		                     <span th:if="${#fields.hasErrors('libdeparteement')}" th:errors="*{libdeparteement}" th:errorclass="fieldError">Name Error</span>
+		                    </div>
+	                   </div>
+            		   <div class="form-group">
+		                    <label  class="col-sm-2 control-label" for="inputEmail3">Description</label>
+		                    <div class="col-sm-10">
+		                     <input type="text" th:field="*{description}"  id="description" placeholder="description" class="form-control" ></input>         
+		                    </div>
+	                   </div>
+	                  
+          
+						 <div class="modal-footer">
+	                      <button type="submit" class="btn btn-default" data-dismiss="modal">Close</button>
+	                      <button type="button" class="btn btn-primary">Save changes</button>
+	                    </div>
+					</form>
+                   </div>
+                  
+				
+                 </div>
+               </div>
+             </div>
+             <!-- END MODAL DEPARTEMENT -->
+              <!-- START MODAL COMMUNE -->
+	        <div id="modalCommune" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
+               <div class="modal-dialog modal-lf">
+                 <div class="modal-content">
+
+                   <div class="modal-header">
+                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">x</span>
+                     </button>
+                     <h4 class="modal-title" id="myModalLabel">Commune</h4>
+                   </div>
+                 
+                   <div class="modal-body">
+                       <form id="demo-form2"  class="form-horizontal form-label-left">
+                       	<div class="form-group">
+		                    <label  class="col-sm-2 control-label" for="inputEmail3">Département</label>
+		                    <div class="col-sm-10">
+		                          <select id="heard" class="form-control">
+		                            <option value="">Choose..</option>
+		                            <option value="press">Press</option>
+		                            <option value="net">Internet</option>
+		                            <option value="mouth">Word of mouth</option>
+		                          </select>
+		                    </div>
+                  		</div>
+	            		<div class="form-group">
+		                    <label  class="col-sm-2 control-label" for="inputEmail3">Libellé</label>
+		                    <div class="col-sm-10">
+		                     <input type="text" class="form-control" id="inputEmail3" placeholder="Email"/>          
+		                    </div>
+	                   </div>
+	                  <div class="form-group">
+	                    <label class="col-sm-2 control-label" for="inputPassword3" >Description</label>
+	                    <div class="col-sm-10">
+	                        <input type="text" class="form-control"  id="inputPassword3" placeholder="Password"/>
+	                    </div>
+	                  </div>
+          
+						 <div class="modal-footer">
+	                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	                      <button type="button" class="btn btn-primary">Save changes</button>
+	                    </div>
+					</form>
+                   </div>
+                  
+				
+                 </div>
+               </div>
+             </div>
+             <!-- END MODAL COMMUNE -->
+          </div>
+        </div>
+        <!-- /page content -->    
+  </div>
+
+  <footer>
+    <p layout:fragment="custom-footer">This is some footer content from content page 1</p>
+  </footer>
+  
+
+</body>
+</html>

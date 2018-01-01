@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout">
+<head>
+    <title>Programme Emploi Jeune</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <!-- page content -->
+    <!-- page content -->
+    <div class="right_col" role="main">
+        <div class="">
+            <div class="clearfix"></div>
+            <div th:with="notifyMessages=${session[T(com.pej.services.NotificationServiceImpl).NOTIFY_MSG_SESSION_KEY]}">
+                <div th:each="msg : ${notifyMessages}" class="alert alert-success alert-dismissible fade in"
+                     th:classappend="'alert-'+${#strings.toLowerCase(msg.type)}" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                            aria-hidden="true">×</span>
+                    </button>
+                    <strong th:text="${msg.text}"></strong>
+                </div>
+                <span th:if="${notifyMessages}" th:remove="all"
+                      th:text="${session.remove(T(com.pej.services.NotificationServiceImpl).NOTIFY_MSG_SESSION_KEY)}"></span>
+            </div>
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                            <form id="frmRecherche" class="form-horizontal form-label-left" action="#"
+                                  th:action="@{/pej/statistiques}"  method="post">
+
+                                <div class="item form-group item-filter">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="tableau_repartition">TABLEAU DE REPARTITION
+                                        <span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-3 col-sm-3 col-xs-6">
+                                        <select   name="tableau_repartition" id="tableau_repartition" class="form-control operation">
+                                            <option value="repartition_candidat_commune_et_sexe">Tableau de répartition de l'effectifs des candidats enregistrés par commune selon le sexe</option>
+                                            <option value="repartition_beneficiaire_formation_commune_et_sexe">Tableau de répartition  de l'effectif  des bénéficiaires de formation sélectionnés</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="item form-group item-filter">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="formationOptions">A
+                                        POUR LES TYPES DE FORMATIONS
+                                        <span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-3 col-sm-3 col-xs-6">
+                                        <select name="where_formation" id="formation" class="select2_single form-control item-value multi-filter"
+                                                multiple="multiple">
+                                            <option data-th-each="typeFormation : ${typeFormations}"
+                                                    th:text="${typeFormation.intitule}"
+                                                    th:value="${{typeFormation.idtypeformation}}"></option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="item form-group item-filter">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="communeOptions">GROUPE PAR COMMUNE
+                                        <span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-3 col-sm-3 col-xs-6">
+                                        <select name="group_by_commune" id="communeOptions"  class="form-control operation" data-attribute="localcommune">
+                                            <option value=""></option>
+                                            <option value="oui">OUI</option>
+                                            <option value="non">NON</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="item form-group item-filter">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="sexeOptions">GROUPE PAR SEXE
+                                        <span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-3 col-sm-3 col-xs-6">
+                                        <select name="group_by_sexe" id="sexeOptions"  class="form-control operation" data-attribute="sexe">
+                                            <option value=""></option>
+                                            <option value="oui">OUI</option>
+                                            <option value="non">NON</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+
+
+                                <div class="ln_solid"></div>
+                                <div class="form-group">
+                                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                        <button type="reset" class="btn btn-primary">ANNULER</button>
+                                        <button type="button" id="submit-candidat-filter" class="btn btn-success">RECHERCHER</button>
+                                    </div>
+                                </div>
+
+                            </form>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2>TABLEAU DE REPARTITION</h2>
+                            <ul class="nav navbar-right panel_toolbox">
+                                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                </li>
+                                <li><a class="close-link"><i class="fa fa-close"></i></a>
+                                </li>
+                            </ul>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="x_content">
+
+                            <div class="table-responsive">
+
+                            </div>
+                            <div class="row" style="padding-top:5px;">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- DEBUT MODAL DON -->
+        <!--<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">-->
+        <!--<div class="modal-dialog modal-lg">-->
+        <!--<div class="modal-content">-->
+
+        <!--<div class="modal-header">-->
+        <!--<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>-->
+        <!--</button>-->
+        <!--<h4 class="modal-title" id="myModalLabel">ACCORDER UN DON</h4>-->
+        <!--</div>-->
+        <!--<div class="modal-body">-->
+        <!--<h4>ACCORDER UN DON</h4>-->
+        <!--<form id="frmAgent"  class="form-horizontal form-label-left"  method="post">-->
+        <!--<div class="item form-group">-->
+        <!--<label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">DEPARTEMENT <span class="required">*</span>-->
+        <!--</label>-->
+        <!--<div class="col-md-6 col-sm-6 col-xs-12">-->
+        <!--<select id="departement" name="departement" class="select2_single form-control" >-->
+        <!--<option data-th-each="departement : ${departements}" th:text="${departement.libdeparteement}" th:value="${departement.codedepartement}"></option>-->
+        <!--</select>-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--<div class="item form-group">-->
+        <!--<label for="numerofiche" class="control-label col-md-3 col-sm-3 col-xs-12">INTITULE</label>-->
+        <!--<div class="col-md-6 col-sm-6 col-xs-12">-->
+        <!--<input type="text" id="libantenne"  th:required="required" class="form-control col-md-7 col-xs-12"/>-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--<div class="item form-group">-->
+        <!--<label for="nom" class="control-label col-md-3 col-sm-3 col-xs-12">NOM</label>-->
+        <!--<div class="col-md-6 col-sm-6 col-xs-12">-->
+        <!--<input type="text" id="responsable" th:required="required" class="form-control col-md-7 col-xs-12"/>-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--<div class="item form-group">-->
+        <!--<label for="nom" class="control-label col-md-3 col-sm-3 col-xs-12">TELEPHONE</label>-->
+        <!--<div class="col-md-6 col-sm-6 col-xs-12">-->
+        <!--<input type="text" id="numpresponsable"  th:required="required" class="form-control col-md-7 col-xs-12"/>-->
+        <!--</div>-->
+        <!--</div>-->
+
+
+        <!--<div class="ln_solid"></div>-->
+        <!--<div class="form-group">-->
+        <!--<div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">-->
+        <!--<button type="button" class="btn btn-default" data-dismiss="modal">FERMER</button>-->
+        <!--<button type="button" class="btn btn-primary">ENREGISTRER</button>-->
+        <!--</div>-->
+        <!--</div>-->
+
+        <!--</form>-->
+        <!--</div>-->
+
+        <!--</div>-->
+        <!--</div>-->
+        <!--</div>-->
+        <!-- FIN MODAL DON -->
+    </div>
+    <!-- /page content -->
+    <!-- /page content -->
+</div>
+
+<footer>
+    <p layout:fragment="custom-footer">This is some footer content from content page 1</p>
+</footer>
+
+
+</body>
+</html>

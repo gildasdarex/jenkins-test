@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorator="layout">
+<head>
+  <title>PEJ/Entreprise</title>
+</head>
+<body>
+ 
+  <div layout:fragment="content">
+
+      <script type="text/javascript" th:inline="javascript">
+		    /*<![CDATA[*/
+            function deleteEntreprise(id){
+                var url='/pej/entreprises/delete/'+$('#idcontenu').val();
+var setDelEntreprise=function(jqXHR){
+console.log('START DELETE ENTREPRISE  OK');
+
+  try {
+      //var resultats = jQuery.parseJSON( jqXHR.responseText );
+      console.log('Ajax response error:');
+        new PNotify({
+                      title: 'Programme Emploi Jeune',
+                      text: 'Entreprise supprimé avec succès',
+                      type: 'success',
+                      styling: 'bootstrap3'
+                  });
+                  window.location.reload();
+  }
+  catch(err) {
+
+      new PNotify({
+          title: 'Programme Emploi Jeune',
+          text: 'Erreur lors de la suppression entreprise',
+          type: 'error',
+          styling: 'bootstrap3'
+      });
+  }
+};
+var delentreprise=doGetEdition(url, setDelEntreprise);
+            }
+
+
+
+	    	function editionModalEntreprise(id){
+      var url='/pej/entreprises/'+id;
+      var setEdition=function(jqXHR){
+          console.log('START Edition entreprise OK');
+           try {
+                  var entrepriseform = jQuery.parseJSON( jqXHR.responseText );
+                  $('#departementEntreprise').empty();
+                  $('#communeEntreprise').empty();
+                   $('#candidatEntreprise').empty();
+                  $('#arrondissementEntreprise').empty();
+                  $('#identreprise').empty();
+                  $('#numeroifu').empty();
+                  $('#contact').empty();
+                  console.log('Ajax response error:',entrepriseform);
+                  var optionsDepartement='<option value="">Sélectionner un departement</option>';
+                  var selectedDepartement;
+                  var optionsCommune='<option value="">Sélectionner une commune</option>';
+                  var selectedCommune;
+                  var optionsArrondissement='<option value="">Sélectionner un arrondissement</option>';
+                  var selectedArrondissement;
+                  var optionsQuartier='<option value="">Sélectionner un quartier </option>';
+                  var selectedQuartier;
+                  var optionsCandidat='<option value="">Sélectionner un candidat </option>';
+                  var selectedCandidat;
+                  var selectedIdentreprise;
+                  var selectedraisonsocial;
+                  var selectednumeroifu;
+                  var selectedcontact;
+                  var selectedlogitude;
+                  var selectedlatitude;
+                  for (i = 0; i < entrepriseform.length; i++)
+                  {
+                  selectedIdentreprise=entrepriseform[i].identreprise;
+                  selectedraisonsocial=entrepriseform[i].raisonsociale;
+                  selectednumeroifu=entrepriseform[i].numeroifu;
+                  selectedcontact=entrepriseform[i].contact;
+                   selectedlogitude=entrepriseform[i].longitude;
+                    selectedlatitude=entrepriseform[i].latitude;
+                   selectedDepartement= entrepriseform[i].departementChoisie.codedepartement;
+                    for (j = 0; j < entrepriseform[i].departements.length; j++)
+                     {
+                      optionsDepartement=optionsDepartement+'<option value="'+entrepriseform[i].departements[j].codedepartement+'">'+entrepriseform[i].departements[j].libdeparteement+'</option>';
+                     }
+                     selectedCommune= entrepriseform[i].communeChoisie.codecommune;
+                      for (j = 0; j < entrepriseform[i].communes.length; j++)
+                      {
+                       optionsCommune=optionsCommune+'<option value="'+entrepriseform[i].communes[j].codecommune+'">'+entrepriseform[i].communes[j].libcommune+'</option>';
+                      }
+                       selectedArrondissement= entrepriseform[i].arrondissementChoisie.codearrondissement;
+                    for (j = 0; j < entrepriseform[i].arrondissements.length; j++)
+                    {
+                     optionsArrondissement=optionsArrondissement+'<option value="'+entrepriseform[i].arrondissements[j].codearrondissement+'">'+entrepriseform[i].arrondissements[j].libarrondissement+'</option>';
+                    }
+                     selectedQuartier= entrepriseform[i].quartierChoisie.idquartier;
+                                        for (j = 0; j < entrepriseform[i].quartiers.length; j++)
+                                        {
+                                         optionsQuartier=optionsQuartier+'<option value="'+entrepriseform[i].quartiers[j].idquartier+'">'+entrepriseform[i].quartiers[j].libquartier+'</option>';
+                                        }
+                      selectedCandidat= entrepriseform[i].candidatChoisie.idcandidat;
+                                        for (j = 0; j < entrepriseform[i].candidats.length; j++)
+                                        {
+                                         optionsCandidat=optionsCandidat+'<option value="'+entrepriseform[i].candidats[j].idcandidat+'">'+entrepriseform[i].candidats[j].nom+' '+entrepriseform[i].candidats[j].prenom+'</option>';
+                                        }
+                  }
+                   $('#departementEntreprise').append(optionsDepartement);
+                   $('#departementEntreprise option[value='+selectedDepartement+']').prop('selected', true);
+
+                   $('#communeEntreprise').append(optionsCommune);
+                   $('#communeEntreprise option[value='+selectedCommune+']').prop('selected', true);
+                   $('#arrondissementEntreprise').append(optionsArrondissement);
+                   $('#arrondissementEntreprise option[value='+selectedArrondissement+']').prop('selected', true);
+                   $('#quartierEntreprise').append(optionsQuartier);
+                   $('#candidatEntreprise').append(optionsCandidat);
+                    $('#candidatEntreprise option[value='+selectedCandidat+']').prop('selected', true);
+                   $('#quartierEntreprise option[value='+selectedQuartier+']').prop('selected', true);
+                   $('#identreprise').val(selectedIdentreprise);
+                   $('#numeroifu').val(selectednumeroifu);
+                   $('#raisonsociale').val(selectedraisonsocial);
+                   $('#contact').val(selectedcontact);
+                   $('#longitude').val(selectedlogitude);
+                   $('#latitude').val(selectedlatitude);
+                   $('#dialogue').modal('show');
+              }
+              catch(err) {
+
+                  new PNotify({
+                      title: 'Programme Emploi Jeune',
+                      text: 'Erreurd edition odal entreprise' ,
+                      type: 'error',
+                      styling: 'bootstrap3'
+                  });
+
+              }
+
+      };
+       var entreprises=doGet(url, setEdition);
+      }
+
+
+function editionModalAssocierFormateurs(id){
+      var url='/pej/entrepriseformateurs/'+id;
+      var setAssocierFormateur=function(jqXHR){
+          console.log('START ASSOCIER entreprise ET FORMATEURS OK');
+           try {
+                  var entrepriseformateurform = jQuery.parseJSON( jqXHR.responseText );
+                  $('#entreprises').empty();
+                  $('#formateur').empty();
+
+                  console.log('Ajax response error:',entrepriseformateurform);
+                  var optionsEntreprise='<option value="">Sélectionner une entreprise</option>';
+                  var optionsFormateur='<option value="">Sélectionner un formateur</option>';
+                  for (i = 0; i < entrepriseformateurform.length; i++)
+                  {
+
+
+
+                       optionsEntreprise=optionsEntreprise+'<option value="'+entrepriseformateurform[i].entreprise.identreprise+'">'+entrepriseformateurform[i].entreprise.raisonsocial+'</option>';
+
+                      for (j = 0; j < entrepriseformateurform[i].formateurs.length; j++)
+                      {
+                       optionsFormateur=optionsFormateur+'<option value="'+entrepriseformateurform[i].formateurs[j].idformateur+'">'+entrepriseformateurform[i].formateurs[j].nom+'</option>';
+                      }
+
+                  }
+                   $('#entreprises').append(optionsEntreprise);
+                   $('#formateur').append(optionsFormateur);
+                     $('#dialogueAssocier').modal('show');
+              }
+              catch(err) {
+
+                  new PNotify({
+                      title: 'Programme Emploi Jeune',
+                      text: 'Erreurd associer  entreprise et formateur' ,
+                      type: 'error',
+                      styling: 'bootstrap3'
+                  });
+
+              }
+
+      };
+       var entrepriseformateurs=doGet(url, setAssocierFormateur);
+      }
+
+
+
+	    	 function doGet(url, setCommune) {
+	    		 var data;
+	    		 $.ajax({
+	    			 url : 'http://localhost:8080'  + url,
+	    			 type : 'GET' ,
+	    			 dataType : 'application/json' ,
+	    			 beforeSend : function() {
+	    			 },
+	    			 success : function(data) {
+	    				console.log('Show success response: ', data);
+	    			 },
+	    			 complete : function() {
+	    				console.log('Ajax response complete');
+	    			 },
+	    			 error : function(jqXHR) {
+	    				 setCommune(jqXHR);
+	    			 }
+	    		 })
+
+	    		 return data;
+	    	}
+	    	function doGetEdition(url, setCommune) {
+                		    		 var data;
+                		    		 $.ajax({
+                		    			 url : 'http://localhost:8080'  + url,
+                		    			 type : 'GET' ,
+                		    			 dataType : 'application/json' ,
+                		    			 data: $('#frmEntreprise').serialize(),
+                		    			 beforeSend : function() {
+                		    			 },
+                		    			 success : function(data) {
+                		    				console.log('Show success response: ', data);
+                		    			 },
+                		    			 complete : function() {
+                		    				console.log('Ajax response complete');
+                		    			 },
+                		    			 error : function(jqXHR) {
+                		    				 setCommune(jqXHR);
+                		    			 }
+                		    		 })
+
+                		    		 return data;
+                		    	}
+                		    	function update(){
+ var url='/pej/entreprises/edition';
+  var setEditEntreprise=function(jqXHR){
+  console.log('START SETCOMMUNE OK');
+
+      try {
+          //var resultats = jQuery.parseJSON( jqXHR.responseText );
+          console.log('Ajax response error:');
+            $('#dialogue').modal('hide');
+
+            new PNotify({
+                          title: 'Programme Emploi Jeune',
+                          text: 'Entreprise modifié avec succès',
+                          type: 'success',
+                          styling: 'bootstrap3'
+                      });
+                      window.location.reload();
+      }
+      catch(err) {
+
+          new PNotify({
+              title: 'Programme Emploi Jeune',
+              text: 'Erreur lors de la récupération des communes de ce département',
+              type: 'error',
+              styling: 'bootstrap3'
+          });
+      }
+  };
+  var editionentreprise=doGetEdition(url, setEditEntreprise);
+
+}
+		    /*]]>*/
+  </script>
+      <!-- page content -->
+			 <!-- page content -->
+        <div class="right_col" role="main">
+          <div class="">
+
+
+            <div class="clearfix"></div>
+			<div th:with="notifyMessages=${session[T(com.pej.services.NotificationServiceImpl).NOTIFY_MSG_SESSION_KEY]}">
+				  <div th:each="msg : ${notifyMessages}"  class="alert alert-success alert-dismissible fade in" th:classappend="'alert-'+${#strings.toLowerCase(msg.type)}" role="alert">
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+					</button>
+					<strong th:text="${msg.text}"></strong>
+				  </div>
+				  <span th:if="${notifyMessages}" th:remove="all" th:text="${session.remove(T(com.pej.services.NotificationServiceImpl).NOTIFY_MSG_SESSION_KEY)}"></span>
+			</div>
+            <div class="row">
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>LISTE DES ENTREPRISES</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <div class="table-responsive" id="contenu_datatable">
+                      <table id="datatable-buttons" class="table table-striped table-bordered bulk_action" cellspacing="0" width="100%">
+                        <thead>
+                          <tr class="headings">
+                            <th>
+                              <input type="checkbox" id="check-all" class="flat"/>
+                            </th>
+                            <th class="column-title">RAISON SOCIALE </th>
+                            <th class="column-title">NUMERO IFU</th>
+                              <th class="column-title">TYPE D'ENTREPRISE</th>
+						    <th class="column-title">CONTACT</th>
+                            <th class="column-title">QUARTIER</th>
+                            <th class="column-title no-link last"><span class="nobr">ACTIONS</span>
+                            </th>
+                            <th class="bulk-actions" colspan="7">
+                              <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+                            </th>
+                          </tr>
+                        </thead>
+
+                        <tbody>
+                         <tr data-th-each="entreprise : ${entreprises}" class="even pointer">
+	                            <td class="a-center ">
+	                              <input type="checkbox" class="flat" name="table_records"/>
+	                            </td>
+								<td class=" " data-th-text="${entreprise.raisonsocial}"></td>
+								<td class=" " data-th-text="${entreprise.numeroifu}"></td>
+                             <td class=" " data-th-text="${entreprise.typeentreprise}"></td>
+								<td class=" " data-th-text="${entreprise.contact}"></td>
+								<td class=" " data-th-text="${entreprise.quartier.libquartier}"></td>
+                             <input type="hidden" id="idcontenu" th:value="${entreprise.identreprise}"  class="form-control col-md-7 col-xs-12"/>
+								<td>
+									<div class="btn-group btn-group-xs" >
+										<a class="btn btn-default"  id="modifier" th:href="@{'/pej/entreprise/' + ${entreprise.identreprise}}" ><i class="fa fa-edit" data-toggle="tooltip" title="Edit"></i> MODIFIER</a>
+                                        <a class="btn btn-default"  id="modifier" th:href="@{'/pej/entreprises/periodsuivi/' + ${entreprise.identreprise}}" ><i class="fa fa-edit" data-toggle="tooltip" title="Edit"></i> PERIODE DE SUIVI</a>
+                                        <a class="btn btn-success"  id="calendrier" th:href="@{'/pej/entreprises/calendrierformateur/' + ${entreprise.identreprise}}" ><i class="fa fa-edit" data-toggle="tooltip" title="Voir calendrier"></i> CALENDRIER</a>
+                                    </div>
+								</td>
+
+							</tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+            <!-- /Popup modification entreprise -->
+            <!--<div id="dialogue" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">-->
+                <!--<div class="modal-dialog modal-lg">-->
+                    <!--<div class="modal-content">-->
+
+                        <!--<div class="modal-header">-->
+                            <!--<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>-->
+                            <!--</button>-->
+                            <!--<h4 class="modal-title" id="myModalLabel">Modifier entreprise</h4>-->
+                        <!--</div>-->
+                        <!--<div class="modal-body">-->
+                            <!--<form id="frmEntreprise" novalidate="true"  class="frmPej form-horizontal form-label-left" action="#" th:action="@{/pej/entreprises/edition}" th:object="${objEntreprise}"   method="get">-->
+                                <!--<div class="item form-group">-->
+                                    <!--<label class="control-label col-md-3 col-sm-3 col-xs-12" for="departementEntreprise">Département <span class="required">*</span>-->
+                                    <!--</label>-->
+                                    <!--<div class="col-md-6 col-sm-6 col-xs-12">-->
+                                        <!--<select id="departementEntreprise" style="width:400px;" name="departement" class="form-control select2_single " >-->
+                                            <!--<option value=""></option>-->
+                                        <!--</select>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                                <!--<div class="item form-group">-->
+                                    <!--<label class="control-label col-md-3 col-sm-3 col-xs-12" for="communeEntreprise">Commune <span class="required">*</span>-->
+                                    <!--</label>-->
+                                    <!--<div class="col-md-6 col-sm-6 col-xs-12">-->
+                                        <!--<select id="communeEntreprise" style="width:400px;"  name="commune" class="select2_single form-control">-->
+                                            <!--<option value=""></option>-->
+                                        <!--</select>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                                <!--<div class="item form-group">-->
+                                    <!--<label class="control-label col-md-3 col-sm-3 col-xs-12" for="arrondissementEntreprise">Arrondissement <span class="required">*</span>-->
+                                    <!--</label>-->
+                                    <!--<div class="col-md-6 col-sm-6 col-xs-12">-->
+                                        <!--<select id="arrondissementEntreprise" style="width:400px;"  name="arrondissement"  class="select2_single form-control">-->
+                                            <!--<option value=""></option>-->
+                                        <!--</select>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                                <!--<div class="item form-group">-->
+                                    <!--<label class="control-label col-md-3 col-sm-3 col-xs-12" for="quartierEntreprise">Quartier <span class="required">*</span>-->
+                                    <!--</label>-->
+                                    <!--<div class="col-md-6 col-sm-6 col-xs-12">-->
+                                        <!--<select id="quartierEntreprise" style="width:400px;"  name="quartier" th:field="*{quartier}"  class="select2_single form-control">-->
+                                            <!--<option value=""></option>-->
+                                        <!--</select>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                                <!--<div class="item form-group">-->
+                                    <!--<label class="control-label col-md-3 col-sm-3 col-xs-12" for="typeEntreprise">Type d'entreprise <span class="required">*</span>-->
+                                    <!--</label>-->
+                                    <!--<div class="col-md-6 col-sm-6 col-xs-12">-->
+                                        <!--<select id="typeEntreprise" style="width:400px;"  name="typeentreprise" th:field="*{typeentreprise}" class="select2_single form-control">-->
+                                            <!--<option value="Entreprise individuelle">Entreprise individuelle</option>-->
+                                            <!--<option value="Société à responsabilité limitée">Société à responsabilité limitée</option>-->
+                                            <!--<option value="Société anonyme">Société anonyme</option>-->
+                                            <!--<option value="Groupement d'intérêt économique">Groupement d'intérêt économique</option>-->
+                                        <!--</select>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                                <!--<div class="item form-group">-->
+                                    <!--<label class="control-label col-md-3 col-sm-3 col-xs-12" for="candidatEntreprise">Candidat <span class="required">*</span>-->
+                                    <!--</label>-->
+                                    <!--<div class="col-md-6 col-sm-6 col-xs-12">-->
+                                        <!--<select id="candidatEntreprise" style="width:400px;" name="candidat" class="form-control select2_single " >-->
+                                            <!--<option value=""></option>-->
+                                        <!--</select>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                                <!--<div class="item form-group">-->
+                                    <!--<label for="raisonsociale" class="control-label col-md-3 col-sm-3 col-xs-12">Raison sociale</label>-->
+                                    <!--<div class="col-md-6 col-sm-6 col-xs-12">-->
+                                        <!--<input type="hidden" id="identreprise"  th:field="*{identreprise}"   class="form-control col-md-7 col-xs-12"/>-->
+                                        <!--<input type="text" id="raisonsociale"  th:field="*{raisonsocial}"  th:required="required" class="form-control col-md-7 col-xs-12"/>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                                <!--<div class="item form-group">-->
+                                    <!--<label for="numeroifu" class="control-label col-md-3 col-sm-3 col-xs-12">N°IFU</label>-->
+                                    <!--<div class="col-md-6 col-sm-6 col-xs-12">-->
+                                        <!--<input type="text" id="numeroifu" th:field="*{numeroifu}" th:required="required" class="form-control col-md-7 col-xs-12"/>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                                <!--<div class="item form-group">-->
+                                    <!--<label for="contact" class="control-label col-md-3 col-sm-3 col-xs-12">Contact</label>-->
+                                    <!--<div class="col-md-6 col-sm-6 col-xs-12">-->
+                                        <!--<input type="text" id="contact" th:field="*{contact}"  th:required="required" class="form-control col-md-7 col-xs-12"/>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                                <!--<div class="item form-group">-->
+                                    <!--<label for="longitude" class="control-label col-md-3 col-sm-3 col-xs-12">Longitude</label>-->
+                                    <!--<div class="col-md-6 col-sm-6 col-xs-12">-->
+                                        <!--<input type="text" id="longitude" th:field="*{longitude}"  th:required="required" class="form-control col-md-7 col-xs-12"/>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                                <!--<div class="item form-group">-->
+                                    <!--<label for="latitude" class="control-label col-md-3 col-sm-3 col-xs-12">Latitude</label>-->
+                                    <!--<div class="col-md-6 col-sm-6 col-xs-12">-->
+                                        <!--<input type="text" id="latitude" th:field="*{latitude}"  th:required="required" class="form-control col-md-7 col-xs-12"/>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</form>-->
+                        <!--</div>-->
+                        <!--<div class="modal-footer">-->
+                            <!--<button type="button" id="update" class="btn btn-primary" th:onclick="${'javascript:update()'}">Modifier</button>-->
+                            <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+
+                        <!--</div>-->
+
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!-- /Fin popup  modification entreprise-->
+            <!-- /Popup associer formateur au entreprise -->
+
+            <!-- /Fin popup  associer formateur au entreprise-->
+
+
+        </div>
+        <!-- /page content -->
+        <!-- /page content -->    
+  </div>
+
+  <footer>
+    <p layout:fragment="custom-footer">This is some footer content from content page 1</p>
+  </footer>
+  
+
+</body>
+</html>

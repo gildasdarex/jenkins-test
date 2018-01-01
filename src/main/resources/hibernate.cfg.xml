@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+		"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+		"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<!--<hibernate-configuration>-->
+    <!--<session-factory>-->
+        <!--<property name="hibernate.connection.driver_class">oracle.jdbc.OracleDriver</property>-->
+        <!--<property name="hibernate.connection.password">Saham10047808</property>-->
+        <!--<property name="hibernate.connection.url">jdbc:oracle:thin:@localhost:1521:dbpej</property>-->
+        <!--<property name="hibernate.connection.username">adminpej</property>-->
+        <!--<property name="hibernate.default_schema">dbpej</property>-->
+        <!--<property name="hibernate.dialect">org.hibernate.dialect.Oracle10gDialect</property>-->
+    <!--</session-factory>-->
+<!--</hibernate-configuration>-->
+
+<hibernate-configuration>
+    <session-factory>
+
+        <!-- Connection settings -->
+        <property name="hibernate.search.autoregister_listeners">true</property>
+        <property name="hibernate.validator.apply_to_ddl">false</property>
+        <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+        <property name="hibernate.connection.url">jdbc:postgresql://localhost/pej</property>
+        <property name="hibernate.connection.username">pejadmin</property>
+        <property name="hibernate.connection.password">pej4ever</property>
+        <!--<property name="hibernate.connection.username">tdarex</property>-->
+        <!--<property name="hibernate.connection.password">tdarex</property>-->
+
+        <!-- SQL dialect -->
+        <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+
+        <!-- Print executed SQL to stdout -->
+        <property name="show_sql">true</property>
+
+        <!-- Drop and re-create all database on startup -->
+        <property name="hibernate.hbm2ddl.auto">create</property>
+
+        <!-- Annotated entity classes -->
+        <mapping class="com.pej.domains.Agent"/>
+        <mapping class="com.pej.domains.Annees"/>
+        <mapping class="com.pej.domains.Antenne"/>
+        <mapping class="com.pej.domains.Arrondissement"/>
+        <mapping class="com.pej.domains.Beneficiaire"/>
+        <mapping class="com.pej.domains.Beneficiairecooperative"/>
+        <mapping class="com.pej.domains.Beneficiairedon"/>
+        <mapping class="com.pej.domains.Cabinet"/>
+        <mapping class="com.pej.domains.Candidat"/>
+        <mapping class="com.pej.domains.Commune"/>
+        <mapping class="com.pej.domains.Cooperative"/>
+        <mapping class="com.pej.domains.Critere"/>
+        <mapping class="com.pej.domains.Agent"/>
+        <mapping class="com.pej.domains.Formateur" />
+        <mapping class="com.pej.domains.Formationbeneficaire" />
+        <mapping class="com.pej.domains.Statutcandidat" />
+        <mapping class="com.pej.domains.Quartier" />
+        <mapping class="com.pej.domains.Beneficiaire" />
+        <mapping class="com.pej.domains.Formation" />
+        <mapping class="com.pej.domains.UsersRole" />
+        <mapping class="com.pej.domains.Rolespermission" />
+        <mapping class="com.pej.domains.Typeformation" />
+        <mapping class="com.pej.domains.Departement" />
+        <mapping class="com.pej.domains.Dossiers" />
+        <mapping class="com.pej.domains.Entreprise" />
+        <mapping class="com.pej.domains.EntrepriseFormateur" />
+        <mapping class="com.pej.domains.Don" />
+        <mapping class="com.pej.domains.DonCooperative" />
+        <mapping class="com.pej.domains.Utilisateur" />
+        <mapping class="com.pej.domains.Permission" />
+        <mapping class="com.pej.domains.Roles" />
+        <mapping class="com.pej.domains.Fformation" />
+        <mapping class="com.pej.domains.Fichefinancement" />
+        <mapping class="com.pej.domains.FileBucket" />
+        <mapping class="com.pej.domains.Formationcooperative" />
+        <mapping class="com.pej.domains.Formationformateur" />
+        <mapping class="com.pej.domains.Formationlot" />
+        <mapping class="com.pej.domains.Fournisseur" />
+        <mapping class="com.pej.domains.Lot" />
+        <mapping class="com.pej.domains.Materiel" />
+        <mapping class="com.pej.domains.Parametres" />
+        <mapping class="com.pej.domains.Periode" />
+        <mapping class="com.pej.domains.Presence" />
+        <mapping class="com.pej.domains.Suivie" />
+        <mapping class="com.pej.domains.PeriodeSuivi" />
+
+
+    </session-factory>
+</hibernate-configuration>

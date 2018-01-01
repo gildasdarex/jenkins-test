@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorator="layout">
+<head>
+  <title>PEJ/D&eacute;coupage territoriale</title>
+</head>
+<body>
+ 
+  <div layout:fragment="content">
+                 <!-- page content -->
+        <div class="right_col" role="main">
+          <div class="">
+            <div class="page-title">
+              <div class="title_left">
+                <h3>EDITION DES GROUPEMENTS D'APPRENANTS</h3>
+              </div>
+
+              <div class="title_right">
+                <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+                  <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search for..."/>
+                    <span class="input-group-btn">
+                      <button class="btn btn-default" type="button">RECHERCHER!</button>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="clearfix"></div>
+			<div th:with="notifyMessages=${session[T(com.pej.services.NotificationServiceImpl).NOTIFY_MSG_SESSION_KEY]}">	
+				  <div th:each="msg : ${notifyMessages}"  class="alert alert-success alert-dismissible fade in" th:classappend="'alert-'+${#strings.toLowerCase(msg.type)}" role="alert">
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+					</button>
+					<strong th:text="${msg.text}"></strong>
+				  </div>
+				  <span th:if="${notifyMessages}" th:remove="all" th:text="${session.remove(T(com.pej.services.NotificationServiceImpl).NOTIFY_MSG_SESSION_KEY)}"></span>
+			</div>
+            <div class="row">
+
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>GROUPEMENT D'APPRENANTS</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <!--<li class="dropdown">-->
+                        <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>-->
+                        <!--<ul class="dropdown-menu" role="menu">-->
+                          <!--<li><a href="#">Settings 1</a>-->
+                          <!--</li>-->
+                          <!--<li><a href="#">Settings 2</a>-->
+                          <!--</li>-->
+                        <!--</ul>-->
+                      <!--</li>-->
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+
+                  <div class="x_content">
+										
+					<form id="frmCooperative"  novalidate="true" class="frmPej form-horizontal form-label-left" action="#" th:action="@{/pej/cooperatives}" th:object="${objCooperative}" method="post">
+                        <div class="item form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="commune">LOT D'AFFECTATION <span class="required">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <select id="lot" name="lot" class="select2_single form-control" th:field="*{lot}">
+                                    <option data-th-each="lot : ${lots}" th:text="${lot.intitule}" th:value="${lot.idlot}"></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="item form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="commune">COMMUNE <span class="required">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                               <select id="commune" name="commune" class="select2_single form-control" th:field="*{commune}">
+	                            	<option data-th-each="commune : ${communes}" th:text="${commune.libcommune}" th:value="${commune.codecommune}"></option>
+	                           </select>
+                            </div>
+                        </div>
+                        
+                        <div class="item form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="type">TYPE D'ENSEMBLE<span class="required">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                               <select id="type" name="type" class="select2_single form-control" th:field="*{type}">
+                            		<option value="Coopérative">Coopérative</option> 
+                            		<option value="Ensemble d'apprenants">Ensemble d'apprenants</option>  
+	                           </select>
+                            </div>
+                        </div>
+
+                        <div class="item form-group">
+                            <label for="numordregroupe" class="control-label col-md-3 col-sm-3 col-xs-12">NUMERO DU GROUPE</label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input type="text" id="numordregroupe" th:field="*{numordregroupe}"  class="form-control col-md-7 col-xs-12"/>
+                            </div>
+                        </div>
+                        
+				       <div class="item form-group">
+                            <label for="numerofiche" class="control-label col-md-3 col-sm-3 col-xs-12">INTITULE</label>
+                             <div class="col-md-6 col-sm-6 col-xs-12">
+                              <input type="text" id="libgroupe" th:field="*{libgroupe}" th:required="required" class="form-control col-md-7 col-xs-12"/>
+                            </div>
+                        </div>
+                        <div class="item form-group">
+                            <label for="nombre" class="control-label col-md-3 col-sm-3 col-xs-12">NOMBRE</label>
+                             <div class="col-md-6 col-sm-6 col-xs-12">
+                              <input type="text" id="nombre" th:field="*{nombre}" class="form-control col-md-7 col-xs-12"/>
+                            </div>
+                        </div>
+					    <div class="item form-group">
+                            <label for="nom" class="control-label col-md-3 col-sm-3 col-xs-12">DESCRIPTION</label>
+                             <div class="col-md-6 col-sm-6 col-xs-12">
+                              <input type="text" id="description" th:field="*{description}"  class="form-control col-md-7 col-xs-12"/>
+                            </div>
+                        </div>
+                        <div class="item form-group" style="display:none;">
+                            <label for="idgroupe" class="control-label col-md-3 col-sm-3 col-xs-12">ID Antenne</label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input type="text" id="idgroupe" th:field="*{idgroupe}"  class="form-control col-md-7 col-xs-12"/>
+                            </div>
+                        </div>
+                        
+					    <div class="ln_solid"></div>
+					    <div class="form-group">
+					      <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+					        <button type="reset" class="btn btn-primary">ANNULER</button>
+					        <button type="submit" class="btn btn-success">ENREGISTRER</button>
+					      </div>
+					    </div>
+					
+					  </form>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+           
+          </div>
+        </div>
+        <!-- /page content -->    
+  </div>
+
+  <footer>
+    <p layout:fragment="custom-footer">This is some footer content from content page 1</p>
+  </footer>
+  
+
+    <!-- /validator -->
+</body>
+</html>

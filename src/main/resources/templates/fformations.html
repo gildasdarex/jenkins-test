@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorator="layout">
+<head>
+  <title>Programme Emploi Jeune</title>
+</head>
+<body>
+
+  <div layout:fragment="content">
+        <!-- page content -->
+			 <!-- page content -->
+        <div class="right_col" role="main">
+          <div class="">
+
+
+            <div class="clearfix"></div>
+			<div th:with="notifyMessages=${session[T(com.pej.services.NotificationServiceImpl).NOTIFY_MSG_SESSION_KEY]}">
+				  <div th:each="msg : ${notifyMessages}"  class="alert alert-success alert-dismissible fade in" th:classappend="'alert-'+${#strings.toLowerCase(msg.type)}" role="alert">
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+					</button>
+					<strong th:text="${msg.text}"></strong>
+				  </div>
+				  <span th:if="${notifyMessages}" th:remove="all" th:text="${session.remove(T(com.pej.services.NotificationServiceImpl).NOTIFY_MSG_SESSION_KEY)}"></span>
+			</div>
+            <div class="row">
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>LISTE DES FORMATIONS DE FORMATEURS</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <!-- <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                          <li><a href="#">Settings 1</a>
+                          </li>
+                          <li><a href="#">Settings 2</a>
+                          </li>
+                        </ul>
+                      </li> -->
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                     <div class="row" >
+							 <a style="margin-left: 8px;" href="#" th:href="@{/pej/fformations/add}" class="btn btn-info"><i class="fa fa-plus"></i> AJOUTER</a>
+					</div>
+                    <div class="table-responsive">
+                      <table id="datatable-buttons" class="table table-striped table-bordered display nowrap"  cellspacing="0" width="100%">
+                        <thead>
+                          <tr class="headings">
+                            <th>
+                              <input type="checkbox" id="check-all" class="flat"/>
+                            </th>
+                            <th class="column-title">#</th>
+                            <th class="column-title">INTITULE</th>
+                            <th class="column-title">THEME</th>
+                            <th class="column-title">DATE DE DEBUT</th>
+                            <th class="column-title">DATE DE FIN </th>
+                            <th class="column-title">HEURE DE DEBUT</th>
+                            <th class="column-title">HEURE DE FIN</th>
+                            <th class="column-title no-link last"><span class="nobr">ACTION</span>
+                            </th>
+                            <th class="bulk-actions" colspan="7">
+                              <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+                            </th>
+                          </tr>
+                        </thead>
+
+                        <tbody>
+                         <tr data-th-each="formation : ${formations}" class="even pointer">
+	                            <td class="a-center ">
+	                              <input type="checkbox" class="flat" name="table_records"/>
+	                            </td>
+								<td class=" " data-th-text="${formation.idformation}"></td>
+								<td class=" " data-th-text="${formation.intitule}"></td>
+								<td class=" " data-th-text="${formation.theme}"></td>
+								<td class=" " data-th-text="${#dates.format(formation.datedebut,'dd/MM/yyyy')}"></td>
+								<td class=" " data-th-text="${#dates.format(formation.datefin,'dd/MM/yyyy')}"></td>
+								<td class=" " data-th-text="${formation.heuredebut}"></td>
+								<td class=" " data-th-text="${formation.heurefin}"></td>
+								<!-- td class=" ">
+									<div class="btn-group btn-group-xs">
+
+									</div>
+								</td-->
+								<td class=" ">
+	                                <!-- Split button -->
+				                    <div class="btn-group">
+				                      <button type="button" class="btn btn-primary btn-xs">ACTIONS</button>
+				                      <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+				                        <span class="caret"></span>
+				                        <span class="sr-only">Toggle Dropdown</span>
+				                      </button>
+				                      <ul class="dropdown-menu" role="menu">
+				                        <li><a  th:href="@{'/pej/fformations/' + ${formation.idformation}}"><i class="fa fa-edit" data-toggle="tooltip" title="Edit"></i> Modifier</a></li>
+										<li><a   th:href="@{'/pej/formationformateur/formation/' + ${formation.idformation}}"><i class="fa fa-plus" data-toggle="tooltip" title="Ajouter participant"></i> Ajouter participant</a></li>
+										<!-- li><a   th:href="@{'/pej/formationgroupe/formation/' + ${formation.idformation}}"><i class="fa fa-plus" data-toggle="tooltip" title="Ajouter groupe"></i> Ajouter groupe</a></li-->
+										<li><a   href="#"><i class="fa fa-plus" data-toggle="tooltip" title="Liste de présence"></i>Présence</a></li>
+
+				                      </ul>
+				                    </div>
+	                            </td>
+
+
+							</tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /page content -->
+        <!-- /page content -->
+  </div>
+
+  <footer>
+    <p layout:fragment="custom-footer">This is some footer content from content page 1</p>
+  </footer>
+
+
+</body>
+</html>
