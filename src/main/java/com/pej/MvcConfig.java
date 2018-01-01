@@ -17,21 +17,13 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
     public void addViewControllers(ViewControllerRegistry registry) {
     	 registry.addViewController("/").setViewName(
                  "forward:login.html");
-        // registry.addViewController("/").setViewName("login");
          registry.addViewController("pej/login").setViewName("login");
          registry.addViewController("/login").setViewName("login");
     }
 
     @Bean
     public DozerBeanMapperFactoryBean getDozerMapper() throws Exception{
-        DozerBeanMapperFactoryBean returnValue= new DozerBeanMapperFactoryBean();/*
-        Resource[] resources = new PathMatchingResourcePatternResolver().getResources("classpath*:dozer-bean-mappings.xml");
-        returnValue.setMappingFiles(resources);*/
+        DozerBeanMapperFactoryBean returnValue= new DozerBeanMapperFactoryBean();
         return returnValue;
     }
-
-//    @Override
-//    public void addFormatters(FormatterRegistry registry) {
-//        registry.addFormatter(new FormateurFormatter());
-//    }
 }
